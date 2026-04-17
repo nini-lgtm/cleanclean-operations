@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>淨淨 Clean Clean 營運儀表板</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>淨淨 Clean Clean - 營運儀表板</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <style>
         * {
@@ -15,122 +15,121 @@
 
         body {
             font-family: 'Noto Sans TC', 'Inter', sans-serif;
-            background: linear-gradient(135deg, #F7FAFB 0%, #E8F4F8 100%);
-            color: #2C3E50;
-            min-height: 100vh;
+            background-color: #F7FAFB;
+            color: #333;
+            overflow-x: hidden;
         }
 
         .navbar {
-            background: white;
-            border-bottom: 2px solid #E0E7EB;
+            background-color: white;
+            border-bottom: 1px solid #E0E7FF;
             padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .navbar-container {
-            max-width: 1400px;
-            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .navbar-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .navbar-logo img {
-            height: 36px;
+            height: 40px;
             width: auto;
         }
 
-        .navbar-controls {
+        .navbar-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #5CC8D7;
+        }
+
+        .navbar-center {
             display: flex;
-            gap: 1.5rem;
+            gap: 2rem;
             align-items: center;
         }
 
-        .control-group {
+        .filter-group {
             display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            gap: 1rem;
+            align-items: center;
         }
 
-        .control-group label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #64748B;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .filter-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #666;
         }
 
         select {
             padding: 0.5rem 1rem;
-            border: 2px solid #D1D5DB;
+            border: 1px solid #D1D5DB;
             border-radius: 6px;
-            background: white;
-            font-family: 'Noto Sans TC', 'Inter', sans-serif;
+            background-color: white;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        select:hover { border-color: #3B82C4; }
-        select:focus { outline: none; border-color: #3B82C4; box-shadow: 0 0 0 3px rgba(59, 130, 196, 0.1); }
+        select:hover {
+            border-color: #5CC8D7;
+        }
 
-        .tab-bar {
-            background: white;
-            border-bottom: 2px solid #E0E7EB;
-            padding: 0 2rem;
+        select:focus {
+            outline: none;
+            border-color: #5CC8D7;
+            box-shadow: 0 0 0 3px rgba(92, 200, 215, 0.1);
+        }
+
+        .tabs {
             display: flex;
-            gap: 1rem;
-            overflow-x: auto;
-            position: sticky;
-            top: 80px;
-            z-index: 99;
-            box-shadow: inset 0 -2px 0 rgba(0,0,0,0.05);
+            gap: 0.5rem;
+            padding: 1.5rem 2rem;
+            background-color: white;
+            border-bottom: 1px solid #E0E7FF;
+            flex-wrap: wrap;
         }
 
-        .tab-button {
-            padding: 1rem 1.5rem;
-            background: none;
+        .tab-btn {
+            padding: 0.7rem 1.5rem;
             border: none;
-            border-bottom: 3px solid transparent;
-            font-family: 'Noto Sans TC', 'Inter', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #64748B;
+            background-color: #F3F4F6;
+            color: #666;
+            border-radius: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s;
         }
 
-        .tab-button:hover {
-            color: #3B82C4;
-            background: rgba(59, 130, 196, 0.05);
+        .tab-btn:hover {
+            background-color: #E5E7EB;
         }
 
-        .tab-button.active {
-            color: #3B82C4;
-            border-bottom-color: #3B82C4;
+        .tab-btn.active {
+            background-color: #5CC8D7;
+            color: white;
+            box-shadow: 0 2px 8px rgba(92, 200, 215, 0.3);
         }
 
         .container {
             max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
+            margin: 2rem auto;
+            padding: 0 2rem;
         }
 
         .tab-content {
             display: none;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.3s;
         }
 
         .tab-content.active {
@@ -138,17 +137,49 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .channel-cards-grid {
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+            border: 1px solid #E0E7FF;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .change-positive {
+            color: #10B981;
+        }
+
+        .change-negative {
+            color: #EF4444;
+        }
+
+        .channel-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
@@ -156,1548 +187,1653 @@
         }
 
         .channel-card {
-            background: white;
-            border-radius: 12px;
+            background-color: white;
+            border-radius: 10px;
             padding: 1.5rem;
-            border: 1px solid #E8EEF3;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            transition: all 0.3s ease;
+            border: 1px solid #E0E7FF;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
         }
 
-        .channel-card:hover {
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-            transform: translateY(-4px);
+        .channel-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: currentColor;
         }
 
         .channel-name {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-weight: 700;
+            font-weight: 600;
+            color: #333;
             margin-bottom: 1rem;
             font-size: 0.95rem;
         }
 
         .channel-dot {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            flex-shrink: 0;
+            display: inline-block;
         }
 
-        .channel-revenue {
-            font-size: 1.3rem;
+        .channel-value {
+            font-size: 1.5rem;
             font-weight: 700;
-            color: #2C3E50;
-            margin-bottom: 0.75rem;
+            color: #111;
+            margin-bottom: 0.5rem;
         }
 
         .channel-change {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-bottom: 1rem;
         }
-
-        .change-positive { color: #10B981; font-weight: 600; }
-        .change-negative { color: #EF4444; font-weight: 600; }
 
         .sparkline {
             width: 100%;
-            height: 40px;
-            margin-top: 0.5rem;
+            height: 35px;
+            background-color: #F9FAFB;
+            border-radius: 4px;
+            position: relative;
         }
 
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+        .sparkline-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            width: 100%;
+            height: 100%;
+            padding: 4px;
         }
 
-        .kpi-card {
-            background: linear-gradient(135deg, #F7FAFB 0%, #E8F4F8 100%);
+        .sparkline-bar {
+            width: 8%;
+            background-color: rgba(92, 200, 215, 0.6);
+            border-radius: 2px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #111;
+            margin: 2rem 0 1.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background-color: #5CC8D7;
+            border-radius: 2px;
+        }
+
+        .section-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0 1.5rem 0;
+        }
+
+        .total-revenue-badge {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, #5CC8D7 0%, #3B82C4 100%);
+            color: #fff;
+            padding: 10px 24px;
             border-radius: 12px;
-            padding: 2rem;
-            border: 1px solid #D0E3F0;
-            text-align: center;
+            box-shadow: 0 4px 15px rgba(59, 130, 196, 0.3);
         }
 
-        .kpi-label {
+        .total-revenue-badge .badge-label {
             font-size: 0.85rem;
-            color: #64748B;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-        }
-
-        .kpi-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #3B82C4;
-            margin-bottom: 0.5rem;
-        }
-
-        .kpi-subtext {
-            font-size: 0.9rem;
-            color: #7B8A9E;
-        }
-
-        .total-revenue-card {
-            background: linear-gradient(135deg, #3B82C4 0%, #2563EB 100%);
-            border-radius: 12px;
-            padding: 3rem 2rem;
-            color: white;
-            text-align: center;
-            margin-bottom: 2rem;
-            box-shadow: 0 8px 24px rgba(59, 130, 196, 0.3);
-        }
-
-        .total-revenue-label {
-            font-size: 1rem;
+            font-weight: 500;
             opacity: 0.9;
-            margin-bottom: 1rem;
-            font-weight: 600;
-            letter-spacing: 1px;
         }
 
-        .total-revenue-value {
-            font-size: 3rem;
+        .total-revenue-badge .badge-value {
+            font-size: 1.4rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
-            font-variant-numeric: tabular-nums;
+            font-family: 'Inter', monospace;
         }
 
-        .charts-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        @media (max-width: 1024px) {
-            .charts-section {
-                grid-template-columns: 1fr;
-            }
+        .total-revenue-badge .badge-change {
+            font-size: 0.8rem;
+            font-weight: 500;
+            opacity: 0.85;
         }
 
         .chart-container {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border: 1px solid #E8EEF3;
-        }
-
-        .chart-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #2C3E50;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #E0E7EB;
-        }
-
-        .chart-canvas {
             position: relative;
-            height: 300px;
+            width: 100%;
+            height: 350px;
+            margin-bottom: 2rem;
         }
 
-        .table-container {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border: 1px solid #E8EEF3;
-            overflow-x: auto;
-            margin-bottom: 2rem;
+        .full-width-chart {
+            width: 100%;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-
-        thead {
-            background: #F8FAFC;
-            border-bottom: 2px solid #E0E7EB;
-        }
-
-        th {
-            padding: 1rem;
-            text-align: left;
-            font-weight: 700;
-            color: #2C3E50;
-        }
-
-        td {
-            padding: 1rem;
-            border-bottom: 1px solid #E8EEF3;
-        }
-
-        tbody tr:hover { background: #F8FAFC; }
-
-        .live-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: #D1FAE5;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #047857;
-            margin-bottom: 1.5rem;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #10B981;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .progress-section {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border: 1px solid #E8EEF3;
-            margin-bottom: 2rem;
-        }
-
-        .progress-label {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #2C3E50;
-            margin-bottom: 1rem;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 24px;
-            background: #E8EEF3;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #3B82C4 0%, #5BB5A2 100%);
-            border-radius: 12px;
-            transition: width 0.5s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-
-        footer {
-            background: white;
-            border-top: 2px solid #E0E7EB;
-            padding: 2rem;
-            margin-top: 3rem;
-            text-align: center;
-            color: #7B8A9E;
             font-size: 0.9rem;
         }
 
-        footer strong { color: #3B82C4; }
+        table th {
+            background-color: #F3F4F6;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 2px solid #E0E7FF;
+        }
 
-        .breakdown-grid {
+        table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        table tr:hover {
+            background-color: #FAFBFC;
+        }
+
+        table tbody tr:nth-child(1) {
+            border-left: 4px solid #FFD700;
+        }
+
+        table tbody tr:nth-child(2) {
+            border-left: 4px solid #C0C0C0;
+        }
+
+        table tbody tr:nth-child(3) {
+            border-left: 4px solid #CD7F32;
+        }
+
+        .kpi-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
 
-        .breakdown-card {
-            background: white;
-            border-radius: 12px;
+        .kpi-card {
+            background-color: white;
+            border-radius: 10px;
             padding: 1.5rem;
-            border: 1px solid #E8EEF3;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #E0E7FF;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
-        .breakdown-label {
+        .kpi-label {
             font-size: 0.85rem;
-            color: #64748B;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
             font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #111;
             margin-bottom: 0.5rem;
         }
 
-        .breakdown-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #2C3E50;
+        .real-time-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #ECFDF5;
+            color: #059669;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
         }
 
-        .breakdown-change {
-            font-size: 0.85rem;
-            color: #7B8A9E;
+        .pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #10B981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #E5E7EB;
+            border-radius: 4px;
+            overflow: hidden;
             margin-top: 0.5rem;
         }
 
-        @media (max-width: 768px) {
-            .navbar-container {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-            .navbar-controls { width: 100%; flex-direction: column; }
-            .control-group { width: 100%; }
-            .channel-cards-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
-            .total-revenue-value { font-size: 2rem; }
+        .progress-fill {
+            height: 100%;
+            background-color: #5CC8D7;
+            border-radius: 4px;
+            transition: width 0.3s;
         }
 
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #2C3E50;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #E0E7EB;
-        }
-
-        .weekly-selector {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border: 1px solid #E8EEF3;
+        .heatmap {
+            display: grid;
+            gap: 0.5rem;
             margin-bottom: 2rem;
         }
 
-        .selector-group {
+        .heatmap-row {
+            display: grid;
+            grid-template-columns: 100px repeat(auto-fit, minmax(50px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .heatmap-cell {
+            padding: 0.5rem;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 0.75rem;
+            background-color: #F9FAFB;
+        }
+
+        .heatmap-label {
+            font-weight: 600;
+            color: #666;
             display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
             align-items: center;
+            padding: 0.5rem;
         }
 
-        .selector-label {
+        .progress-ring {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 0 auto 2rem auto;
+            font-weight: 700;
+        }
+
+        .progress-ring-center {
+            font-size: 2.5rem;
+            color: #111;
+            font-weight: 700;
+        }
+
+        .progress-ring-label {
+            font-size: 0.85rem;
+            color: #666;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        .target-progress-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid #E0E7FF;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .target-card-title {
+            font-size: 1rem;
             font-weight: 600;
-            color: #2C3E50;
+            color: #111;
+            margin-bottom: 1rem;
         }
 
-        .week-button {
-            padding: 0.5rem 1rem;
-            border: 2px solid #D1D5DB;
-            background: white;
+        .target-progress-bar {
+            height: 12px;
+            background: #E8F0F2;
             border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            overflow: hidden;
+            margin: 1rem 0 0.5rem 0;
         }
 
-        .week-button:hover {
-            border-color: #3B82C4;
-            background: rgba(59, 130, 196, 0.05);
+        .target-progress-fill {
+            height: 100%;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #5CC8D7, #3B82C4);
+            transition: width 1s ease;
         }
 
-        .week-button.active {
-            background: #3B82C4;
+        .target-progress-label {
+            font-size: 0.85rem;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #E0E7FF;
+            color: #5CC8D7;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-align: center;
+            line-height: 28px;
+        }
+
+        .rank-badge.gold {
+            background-color: #FCD34D;
+            color: #92400E;
+        }
+
+        .rank-badge.silver {
+            background-color: #D1D5DB;
+            color: #374151;
+        }
+
+        .rank-badge.bronze {
+            background-color: #FDBA74;
+            color: #7C2D12;
+        }
+
+        .product-ranking-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .product-ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: #F9FAFB;
+            border-radius: 8px;
+        }
+
+        .product-ranking-bar {
+            flex: 1;
+            height: 40px;
+            background: linear-gradient(90deg, #5CC8D7, #3B82C4);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
             color: white;
-            border-color: #3B82C4;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .product-ranking-value {
+            font-weight: 600;
+            color: #111;
+            min-width: 150px;
+            text-align: right;
+        }
+
+        .footer {
+            background-color: white;
+            border-top: 1px solid #E0E7FF;
+            padding: 2rem;
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+
+        .color-official { color: #3B82C4; }
+        .color-shopee { color: #F0985A; }
+        .color-mo { color: #E8746A; }
+        .color-dept { color: #9B7DC4; }
+        .color-channel { color: #5BB5A2; }
+        .color-special { color: #E8C556; }
+        .asheng { color: #6B8FCC; }
+        .color-pr { color: #95A5A6; }
+        .color-emp { color: #78909C; }
+
+        .dot-official { background-color: #3B82C4; }
+        .dot-shopee { background-color: #F0985A; }
+        .dot-mo { background-color: #E8746A; }
+        .dot-dept { background-color: #9B7DC4; }
+        .dot-channel { background-color: #5BB5A2; }
+        .dot-special { background-color: #E8C556; }
+        .dot-asheng { background-color: #6B8FCC; }
+        .dot-pr { background-color: #95A5A6; }
+        .dot-emp { background-color: #78909C; }
+
+        .responsive-hide {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .navbar-center {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            .filter-group {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .channel-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .responsive-hide {
+                display: block;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- NAVBAR -->
     <div class="navbar">
-        <div class="navbar-container">
-            <div class="navbar-logo"><img src="data:image/png;base64,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" alt="淨淨 Clean Clean"></div>
-            <div class="navbar-controls">
-                <div class="control-group">
-                    <label for="monthSelect">選擇月份</label>
-                    <select id="monthSelect">
-                        <option value="2025.01月">2025年1月</option>
-                        <option value="2025.02月">2025年2月</option>
-                        <option value="2025.03月">2025年3月</option>
-                        <option value="2025.04月">2025年4月</option>
-                        <option value="2025.05月">2025年5月</option>
-                        <option value="2025.06月">2025年6月</option>
-                        <option value="2025.07月">2025年7月</option>
-                        <option value="2025.08月">2025年8月</option>
-                        <option value="2025.09月">2025年9月</option>
-                        <option value="2025.10月" selected>2025年10月</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="channelSelect">選擇通路</label>
-                    <select id="channelSelect">
-                        <option value="">全部通路</option>
-                        <option value="官網">官網</option>
-                        <option value="蝦皮">蝦皮</option>
-                        <option value="MO店+">MO店+</option>
-                        <option value="百貨/門市">百貨/門市</option>
-                        <option value="經銷商">經銷商</option>
-                        <option value="特約商">特約商</option>
-                        <option value="團購主">團購主</option>
-                        <option value="阿清">阿清</option>
-                        <option value="阿清(OEM)">阿清(OEM)</option>
-                        <option value="公關">公關</option>
-                    </select>
-                </div>
+        <div class="navbar-left">
+            <img src="data:image/png;base64,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" alt="淨淨 Logo" class="navbar-logo">
+            <div class="navbar-title">淨淨 Clean Clean</div>
+        </div>
+        <div class="navbar-center">
+            <div class="filter-group">
+                <label for="month-select">選擇月份</label>
+                <select id="month-select">
+                    <!-- Options will be populated by JS -->
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="channel-select">選擇通路</label>
+                <select id="channel-select">
+                    <option value="all">全部通路</option>
+                    <!-- Channel options will be populated by JS -->
+                </select>
             </div>
         </div>
     </div>
 
-    <div class="tab-bar">
-        <button class="tab-button active" onclick="switchTab('overview')">營收總覽</button>
-        <button class="tab-button" onclick="switchTab('channel')">通路分析</button>
-        <button class="tab-button" onclick="switchTab('weekly')">週別趨勢</button>
-        <button class="tab-button" onclick="switchTab('returns')">犷退分析</button>
-        <button class="tab-button" onclick="switchTab('april2026')">2026年4月</button>
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-1">營收總覽</button>
+        <button class="tab-btn" data-tab="tab-2">目標達成</button>
+        <button class="tab-btn" data-tab="tab-3">通路分析</button>
+        <button class="tab-btn" data-tab="tab-4">銷售件數</button>
+        <button class="tab-btn" data-tab="tab-5">熱銷排行</button>
+        <button class="tab-btn" data-tab="tab-6">2026年即時</button>
+        <button class="tab-btn" data-tab="tab-7">通路明細</button>
     </div>
 
+    <!-- MAIN CONTENT -->
     <div class="container">
-        <div id="tab-overview" class="tab-content active">
-            <h2 class="section-title">營收總覽 - Revenue Overview</h2>
-            <div id="channelCardsContainer" class="channel-cards-grid"></div>
-            <div class="total-revenue-card">
-                <div class="total-revenue-label">總營收 TOTAL REVENUE</div>
-                <div class="total-revenue-value" id="totalRevenueValue">NT$ 0</div>
-            </div>
-            <div class="charts-section">
-                <div class="chart-container">
-                    <h3 class="chart-title">營收趨勢 (Revenue Trend)</h3>
-                    <div class="chart-canvas"><canvas id="revenueLineChart"></canvas></div>
+        <!-- TAB 1: 營收總覽 -->
+        <div id="tab-1" class="tab-content active">
+            <div class="section-header-row">
+                <div class="section-title" style="margin:0;">個別通路營收</div>
+                <div class="total-revenue-badge">
+                    <span class="badge-label">總營收</span>
+                    <span class="badge-value" id="total-revenue">NT$ 0</span>
+                    <span class="badge-change" id="total-revenue-change">-</span>
                 </div>
+            </div>
+            <div class="channel-grid" id="revenue-grid">
+                <!-- Channel cards will be populated by JS -->
+            </div>
+
+            <div class="section-title">營收趨勢</div>
+            <div class="card full-width-chart">
                 <div class="chart-container">
-                    <h3 class="chart-title">月度營收組成 (Monthly Revenue by Channel)</h3>
-                    <div class="chart-canvas"><canvas id="revenueBarChart"></canvas></div>
+                    <canvas id="revenue-trend-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="section-title">通路營收堆疊</div>
+            <div class="card full-width-chart">
+                <div class="chart-container">
+                    <canvas id="channel-stacked-chart"></canvas>
                 </div>
             </div>
         </div>
 
-        <div id="tab-channel" class="tab-content">
-            <h2 class="section-title">通路分析 - Channel Analysis</h2>
-            <div class="charts-section">
-                <div class="chart-container">
-                    <h3 class="chart-title">通路排名 (Channel Ranking)</h3>
-                    <div class="chart-canvas"><canvas id="channelRankChart"></canvas></div>
-                </div>
-                <div class="chart-container">
-                    <h3 class="chart-title">通路佔比 (Channel Share)</h3>
-                    <div class="chart-canvas"><canvas id="channelPieChart"></canvas></div>
+        <!-- TAB 2: 目標達成 -->
+        <div id="tab-2" class="tab-content">
+            <div class="section-title">年度目標總覽</div>
+            <div class="card">
+                <div class="progress-ring" id="progress-ring">
+                    <div class="progress-ring-center" id="progress-percent">0%</div>
+                    <div class="progress-ring-label">年度目標 NT$ 2.2 億</div>
                 </div>
             </div>
-            <div class="charts-section">
-                <div class="chart-container" style="grid-column: 1 / -1;">
-                    <h3 class="chart-title">通路雴達圖 (Channel Radar)</h3>
-                    <div class="chart-canvas"><canvas id="channelRadarChart"></canvas></div>
-                </div>
+
+            <div class="section-title">通路群組達成率</div>
+            <div id="target-cards-grid" class="kpi-grid">
+                <!-- Target cards will be populated by JS -->
             </div>
-            <div class="table-container">
-                <h3 class="chart-title">通路月度對比 (Channel × Month Matrix)</h3>
-                <table id="channelComparisonTable">
-                    <thead>
-                        <tr>
-                            <th>通路 Channel</th>
-                            <th id="th-month">2025.10月</th>
-                        </tr>
-                    </thead>
-                    <tbody id="channelTableBody"></tbody>
-                </table>
+
+            <div class="section-title">月別累計 vs 目標軌跡</div>
+            <div class="card full-width-chart">
+                <div class="chart-container">
+                    <canvas id="target-trajectory-chart"></canvas>
+                </div>
             </div>
         </div>
 
-        <div id="tab-weekly" class="tab-content">
-            <h2 class="section-title">週別趨勢 - Weekly Trends</h2>
-            <div class="charts-section">
-                <div class="chart-container" style="grid-column: 1 / -1;">
-                    <h3 class="chart-title">週度營收堆疊圖 (Weekly Revenue Stacked)</h3>
-                    <div class="chart-canvas"><canvas id="weeklyStackedChart"></canvas></div>
-                </div>
-            </div>
-            <div class="charts-section">
-                <div class="chart-container" style="grid-column: 1 / -1;">
-                    <h3 class="chart-title">週度對比線圖 (Weekly Pattern Overlay)</h3>
-                    <div class="chart-canvas"><canvas id="weeklyPatternChart"></canvas></div>
-                </div>
-            </div>
-            <div class="weekly-selector">
-                <div class="selector-group">
-                    <span class="selector-label">選擇月份查看詳細</span>
-                    <button class="week-button active" onclick="selectWeeklyMonth('2025.10月')">2025.10月</button>
-                    <button class="week-button" onclick="selectWeeklyMonth('2025.09月')">2025.09月</button>
-                    <button class="week-button" onclick="selectWeeklyMonth('2025.08月')">2025.08月</button>
-                    <button class="week-button" onclick="selectWeeklyMonth('2025.07月')">2025.07月</button>
-                </div>
-            </div>
-            <div class="table-container">
-                <h3 class="chart-title" id="weeklyTableTitle">2025.10月 - 各通路週度營收</h3>
-                <table id="weeklyDetailTable">
-                    <thead>
-                        <tr>
-                            <th>通路 Channel</th>
-                            <th>W1 (第1週)</th>
-                            <th>W2 (第2週)</th>
-                            <th>W3 (第3週)</th>
-                            <th>W4 (第4週)</th>
-                            <th>合計 Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="weeklyDetailBody"></tbody>
-                </table>
-            </div>
-            <div class="table-container">
-                <h3 class="chart-title">熱力圖 - 通路×週度營收強度 (Heatmap)</h3>
-                <table id="heatmapTable">
-                    <thead>
-                        <tr>
-                            <th>通路</th>
-                            <th>W1</th>
-                            <th>W2</th>
-                            <th>W3</th>
-                            <th>W4</th>
-                        </tr>
-                    </thead>
-                    <tbody id="heatmapBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="tab-returns" class="tab-content">
-            <h2 class="section-title">銷退分析 - Returns Analysis</h2>
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-label">總退貨單位</div>
-                    <div class="kpi-value" id="totalReturnsKpi">0</div>
-                    <div class="kpi-subtext">units</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-label">退貨率</div>
-                    <div class="kpi-value" id="returnRateKpi">0%</div>
-                    <div class="kpi-subtext">of total units</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-label">最高退貨通路</div>
-                    <div class="kpi-value" id="worstChannelKpi" style="font-size: 1.3rem;">--</div>
-                    <div class="kpi-subtext" id="worstChannelPercent">--</div>
-                </div>
-            </div>
-            <div class="charts-section">
+        <!-- TAB 3: 通路分析 -->
+        <div id="tab-3" class="tab-content">
+            <div class="section-title">通路營收排名</div>
+            <div class="card full-width-chart">
                 <div class="chart-container">
-                    <h3 class="chart-title">通路退貨率 (Return Rate by Channel)</h3>
-                    <div class="chart-canvas"><canvas id="returnRateChart"></canvas></div>
-                </div>
-                <div class="chart-container">
-                    <h3 class="chart-title">退貨趨勢 (Returns Trend)</h3>
-                    <div class="chart-canvas"><canvas id="returnsTrendChart"></canvas></div>
+                    <canvas id="channel-ranking-chart"></canvas>
                 </div>
             </div>
-            <div class="charts-section">
-                <div class="chart-container" style="grid-column: 1 / -1;">
-                    <h3 class="chart-title">退貨率 vs 營收散點圖 (Return Rate vs Revenue)</h3>
-                    <div class="chart-canvas"><canvas id="returnScatterChart"></canvas></div>
-                </div>
-            </div>
-            <div class="table-container">
-                <h3 class="chart-title">月度退貨數據 (Monthly Returns)</h3>
-                <table id="returnsTable">
-                    <thead>
-                        <tr>
-                            <th>月份 Month</th>
-                            <th>緽單位 Total Units</th>
-                            <th>總退貨 Total Returns</th>
-                            <th>退貨率 Return Rate</th>
-                        </tr>
-                    </thead>
-                    <tbody id="returnsTableBody"></tbody>
-                </table>
-            </div>
-        </div>
 
-        <div id="tab-april2026" class="tab-content">
-            <h2 class="section-title">
-                <span class="live-badge">
-                    <span class="live-dot"></span>
-                    即時資料 Live Data
-                </span>
-                2026年4月營運數據
-            </h2>
-            <div class="breakdown-grid" id="april2026CardsContainer"></div>
-            <div class="progress-section">
-                <div class="progress-label">月進度 (Month Progress)</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="monthProgressBar" style="width: 33.33%;">
-                        10/30 days - 33%
+            <div class="section-title">通路佔比</div>
+            <div class="card">
+                <div style="max-width: 400px; margin: 0 auto;">
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="channel-share-chart"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-label">週期營收</div>
-                    <div class="kpi-value" id="april2026ActualRevenue">NT$ 0</div>
-                    <div class="kpi-subtext">(April 1-10)</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-label">月度預測</div>
-                    <div class="kpi-value" id="april2026ProjectedRevenue">NT$ 0</div>
-                    <div class="kpi-subtext">if current trend continues</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-label">COGS比例</div>
-                    <div class="kpi-value" id="april2026CogsRatio">48.9%</div>
-                    <div class="kpi-subtext">成本佔比</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-label">毛利率</div>
-                    <div class="kpi-value" id="april2026GrossMargin">51.1%</div>
-                    <div class="kpi-subtext">淨利潤率</div>
+
+            <div class="section-title">通路月份對照表</div>
+            <div class="card">
+                <div style="overflow-x: auto;">
+                    <table id="channel-heatmap-table">
+                        <thead>
+                            <tr>
+                                <th>通路</th>
+                                <!-- Month headers will be populated -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be populated -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="charts-section">
-                <div class="chart-container" style="grid-column: 1 / -1;">
-                    <h3 class="chart-title">週度營收分佈 (W1 vs W2 Revenue)</h3>
-                    <div class="chart-canvas"><canvas id="april2026WeeklyChart"></canvas></div>
+
+            <div class="section-title">同年比 (2024 vs 2025)</div>
+            <div class="card full-width-chart">
+                <div class="chart-container">
+                    <canvas id="yoy-chart"></canvas>
                 </div>
             </div>
-            <div class="charts-section">
-                <div class="chart-container" style="grid-column: 1 / -1;">
-                    <h3 class="chart-title">通路營收佔比 (Channel Share)</h3>
-                    <div class="chart-canvas"><canvas id="april2026ChannelChart"></canvas></div>
+        </div>
+
+        <!-- TAB 4: 銷售件數 -->
+        <div id="tab-4" class="tab-content">
+            <div class="section-title">各通路銷售件數</div>
+            <div class="kpi-grid" id="units-kpi-grid">
+                <!-- Units KPI cards will be populated by JS -->
+            </div>
+
+            <div class="section-title">銷售件數趨勢</div>
+            <div class="card full-width-chart">
+                <div class="chart-container">
+                    <canvas id="units-trend-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="section-title">通路件數佔比</div>
+            <div class="card full-width-chart">
+                <div class="chart-container">
+                    <canvas id="units-channel-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="section-title">月別銷售件數</div>
+            <div class="card">
+                <div style="overflow-x: auto;">
+                    <table id="units-table">
+                        <thead>
+                            <tr>
+                                <th>月份</th>
+                                <th>總件數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: 熱銷排行 -->
+        <div id="tab-5" class="tab-content">
+            <div class="section-title">2026 TOP 10 熱銷商品</div>
+            <div class="card full-width-chart">
+                <div class="chart-container">
+                    <canvas id="product-ranking-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="section-title">商品排行表</div>
+            <div class="card">
+                <div style="overflow-x: auto;">
+                    <table id="product-ranking-table">
+                        <thead>
+                            <tr>
+                                <th>排名</th>
+                                <th>商品名稱</th>
+                                <th>營收 (NT$)</th>
+                                <th>銷售件數</th>
+                                <th>件均價</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: 2026年即時 -->
+        <div id="tab-6" class="tab-content">
+            <div class="real-time-badge">
+                <span class="pulse"></span>
+                2026年即時資料
+            </div>
+
+            <div class="section-title">本年度月份營收</div>
+            <div class="kpi-grid" id="monthly-kpi-grid">
+                <!-- Monthly KPI cards will be populated by JS -->
+            </div>
+
+            <div class="section-title">2026 月別營收 (即時)</div>
+            <div class="card full-width-chart">
+                <div class="chart-container">
+                    <canvas id="monthly-2026-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="section-title">通路月別表現</div>
+            <div class="card">
+                <div style="overflow-x: auto;">
+                    <table id="monthly-channel-table">
+                        <thead>
+                            <tr>
+                                <th>月份</th>
+                                <th>總營收 (NT$)</th>
+                                <th>通路數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section-title">退貨追蹤</div>
+            <div class="kpi-grid" id="returns-kpi-grid">
+                <!-- Returns KPI cards will be populated by JS -->
+            </div>
+
+            <div class="section-title">2026 月別退貨率</div>
+            <div class="card full-width-chart">
+                <div class="chart-container">
+                    <canvas id="returns-rate-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 7: 通路明細 -->
+        <div id="tab-7" class="tab-content">
+            <div class="section-header-row">
+                <div class="section-title" style="margin:0;">通路個別明細</div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <select id="sub-channel-selector" style="padding:10px 16px;border:2px solid #5CC8D7;border-radius:10px;background:white;font-size:15px;font-family:inherit;color:#1e293b;cursor:pointer;font-weight:600;">
+                        <option value="百貨/門市">百貨/門市（實體點位）</option>
+                        <option value="團購主">團購主</option>
+                    </select>
+                    <select id="sub-name-selector" style="padding:10px 16px;border:2px solid #3B82C4;border-radius:10px;background:white;font-size:15px;font-family:inherit;color:#1e293b;cursor:pointer;font-weight:600;">
+                        <option value="__ALL__">全部</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="kpi-grid" id="sub-kpi-grid">
+                <!-- populated by JS -->
+            </div>
+
+            <div class="section-title" id="sub-chart-title">2026 YTD 業績排行</div>
+            <div class="card full-width-chart">
+                <div class="chart-container">
+                    <canvas id="sub-rank-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="section-title">月別明細表（2026）</div>
+            <div class="card">
+                <div style="overflow-x:auto;">
+                    <table id="sub-monthly-table">
+                        <thead id="sub-monthly-thead"></thead>
+                        <tbody id="sub-monthly-tbody"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer>
-        <strong>淨淨 Clean Clean © 2026</strong> | 給家人最淨的能量 | 營運管理�;表板
-    </footer>
+    <div class="footer">
+        <p>淨淨 Clean Clean 營運儀表板 | 數據更新至 2026年4月</p>
+    </div>
 
     <script>
-        const rawData = [
-            {channel: '蝦皮', month: '2025.01月', w1Revenue: 228905, w2Revenue: 340354, w3Revenue: 288211, w4Revenue: 157178, w1Units: 203, w2Units: 329, w3Units: 272, w4Units: 145, w1Returns: 4, w2Returns: 2, w3Returns: 6, w4Returns: 0},
-            {channel: 'MO店+', month: '2025.01月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '百貨/門市', month: '2025.01月', w1Revenue: 101339, w2Revenue: 0, w3Revenue: 30554, w4Revenue: 424715, w1Units: 75, w2Units: 0, w3Units: 63, w4Units: 580, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '經銷商', month: '2025.01月', w1Revenue: 136485, w2Revenue: 198230, w3Revenue: 75290, w4Revenue: 6085, w1Units: 7, w2Units: 8, w3Units: 5, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '特約商', month: '2025.01月', w1Revenue: 325436, w2Revenue: 450040, w3Revenue: 224166, w4Revenue: 0, w1Units: 13, w2Units: 22, w3Units: 7, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '團購主', month: '2025.01月', w1Revenue: 47851, w2Revenue: 66123, w3Revenue: 0, w4Revenue: 0, w1Units: 26, w2Units: 34, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清', month: '2025.01月', w1Revenue: 273240, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 2, w2Units: 0, w3Units: 1, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清(OEM)', month: '2025.01月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 14409239, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '公關', month: '2025.01月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 11, w2Units: 102, w3Units: 633, w4Units: 24, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '官網', month: '2025.01月', w1Revenue: 2383428, w2Revenue: 2232563, w3Revenue: 1619405, w4Revenue: 1095674, w1Units: 1618, w2Units: 1577, w3Units: 1207, w4Units: 830, w1Returns: 18, w2Returns: 15, w3Returns: 28, w4Returns: 0},
-            {channel: '蝦皮', month: '2025.02月', w1Revenue: 305557, w2Revenue: 176438, w3Revenue: 310243, w4Revenue: 199671, w1Units: 254, w2Units: 172, w3Units: 256, w4Units: 170, w1Returns: 0, w2Returns: 9, w3Returns: 2, w4Returns: 0},
-            {channel: 'MO店+', month: '2025.02月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 2011, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '百貨/門市', month: '2025.02月', w1Revenue: 229237, w2Revenue: 137971, w3Revenue: 120377, w4Revenue: 66261, w1Units: 264, w2Units: 99, w3Units: 102, w4Units: 64, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '經銷商', month: '2025.02月', w1Revenue: 133875, w2Revenue: 150775, w3Revenue: 229294, w4Revenue: 105725, w1Units: 8, w2Units: 7, w3Units: 6, w4Units: 7, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '特約商', month: '2025.02月', w1Revenue: 274570, w2Revenue: 474350, w3Revenue: 399054, w4Revenue: 466395, w1Units: 13, w2Units: 22, w3Units: 19, w4Units: 5, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '團購主', month: '2025.02月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 12965, w4Revenue: 12482, w1Units: 0, w2Units: 0, w3Units: 14, w4Units: 12, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清', month: '2025.02月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清(OEM)', month: '2025.02月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 1037421, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '公關', month: '2025.02月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 23, w2Units: 72, w3Units: 113, w4Units: 35, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '官網', month: '2025.02月', w1Revenue: 1682035, w2Revenue: 1209095, w3Revenue: 1333497, w4Revenue: 1611118, w1Units: 1190, w2Units: 952, w3Units: 1042, w4Units: 1166, w1Returns: 0, w2Returns: 41, w3Returns: 51, w4Returns: 1},
-            {channel: '蝦皮', month: '2025.03月', w1Revenue: 236509, w2Revenue: 192952, w3Revenue: 297384, w4Revenue: 305401, w1Units: 260, w2Units: 173, w3Units: 309, w4Units: 316, w1Returns: 9, w2Returns: 0, w3Returns: 7, w4Returns: 6},
-            {channel: 'MO店+', month: '2025.03月', w1Revenue: 19733, w2Revenue: 32575, w3Revenue: 157369, w4Revenue: 70827, w1Units: 15, w2Units: 23, w3Units: 102, w4Units: 54, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 2},
-            {channel: '百貨/門市', month: '2025.03月', w1Revenue: 222559, w2Revenue: 160714, w3Revenue: 110726, w4Revenue: 453105, w1Units: 190, w2Units: 138, w3Units: 111, w4Units: 315, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '經銷商', month: '2025.03月', w1Revenue: 138170, w2Revenue: 107040, w3Revenue: 441150, w4Revenue: 175467, w1Units: 9, w2Units: 7, w3Units: 8, w4Units: 7, w1Returns: 0, w2Returns: 0, w3Returns: 1, w4Returns: 0},
-            {channel: '特約商', month: '2025.03月', w1Revenue: 145030, w2Revenue: 343937, w3Revenue: 220611, w4Revenue: 539868, w1Units: 7, w2Units: 11, w3Units: 10, w4Units: 13, w1Returns: 0, w2Returns: 0, w3Returns: 2, w4Returns: 0},
-            {channel: '團購主', month: '2025.03月', w1Revenue: 16547, w2Revenue: 0, w3Revenue: 3328, w4Revenue: 11116, w1Units: 13, w2Units: 0, w3Units: 6, w4Units: 10, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清', month: '2025.03月', w1Revenue: 0, w2Revenue: 6145260, w3Revenue: 823525, w4Revenue: 125813, w1Units: 1, w2Units: 3, w3Units: 2, w4Units: 6, w1Returns: 0, w2Returns: 0, w3Returns: 1, w4Returns: 3},
-            {channel: '阿清(OEM)', month: '2025.03月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '公關', month: '2025.03月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 139, w2Units: 55, w3Units: 54, w4Units: 355, w1Returns: 0, w2Returns: 0, w3Returns: 10, w4Returns: 2},
-            {channel: '官網', month: '2025.03月', w1Revenue: 1328788, w2Revenue: 2205285, w3Revenue: 1110771, w4Revenue: 2124301, w1Units: 950, w2Units: 1477, w3Units: 908, w4Units: 1583, w1Returns: 28, w2Returns: 0, w3Returns: 30, w4Returns: 14},
-            {channel: '蝦皮', month: '2025.04月', w1Revenue: 264580, w2Revenue: 241561, w3Revenue: 339514, w4Revenue: 435892, w1Units: 293, w2Units: 265, w3Units: 365, w4Units: 405, w1Returns: 2, w2Returns: 11, w3Returns: 0, w4Returns: 11},
-            {channel: 'MO店+', month: '2025.04月', w1Revenue: 59044, w2Revenue: 65621, w3Revenue: 106291, w4Revenue: 108007, w1Units: 53, w2Units: 60, w3Units: 100, w4Units: 92, w1Returns: 2, w2Returns: 0, w3Returns: 0, w4Returns: 1},
-            {channel: '百貨/門市', month: '2025.04月', w1Revenue: 113818, w2Revenue: 314265, w3Revenue: 587906, w4Revenue: 706621, w1Units: 125, w2Units: 334, w3Units: 580, w4Units: 637, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '經銷商', month: '2025.04月', w1Revenue: 149998, w2Revenue: 134285, w3Revenue: 125013, w4Revenue: 220868, w1Units: 13, w2Units: 5, w3Units: 6, w4Units: 11, w1Returns: 1, w2Returns: 1, w3Returns: 0, w4Returns: 1},
-            {channel: '特約商', month: '2025.04月', w1Revenue: 75420, w2Revenue: 123695, w3Revenue: 303265, w4Revenue: 386030, w1Units: 5, w2Units: 6, w3Units: 10, w4Units: 9, w1Returns: 1, w2Returns: 0, w3Returns: 0, w4Returns: 2},
-            {channel: '團購主', month: '2025.04月', w1Revenue: 0, w2Revenue: 46643, w3Revenue: 15835, w4Revenue: 32571, w1Units: 0, w2Units: 22, w3Units: 7, w4Units: 28, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清', month: '2025.04月', w1Revenue: 3612, w2Revenue: 0, w3Revenue: 1007104, w4Revenue: 385790, w1Units: 3, w2Units: 1, w3Units: 4, w4Units: 7, w1Returns: 0, w2Returns: 0, w3Returns: 1, w4Returns: 2},
-            {channel: '阿清(OEM)', month: '2025.04月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 11808122, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '公關', month: '2025.04月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 40, w2Units: 108, w3Units: 52, w4Units: 86, w1Returns: 3, w2Returns: 1, w3Returns: 11, w4Returns: 4},
-            {channel: '官網', month: '2025.04月', w1Revenue: 1317017, w2Revenue: 1073539, w3Revenue: 1414251, w4Revenue: 1470410, w1Units: 1296, w2Units: 852, w3Units: 984, w4Units: 1100, w1Returns: 35, w2Returns: 15, w3Returns: 2, w4Returns: 45},
-            {channel: '蝦皮', month: '2025.05月', w1Revenue: 354407, w2Revenue: 185873, w3Revenue: 283285, w4Revenue: 337953, w1Units: 346, w2Units: 190, w3Units: 287, w4Units: 347, w1Returns: 4, w2Returns: 7, w3Returns: 1, w4Returns: 7},
-            {channel: 'MO店+', month: '2025.05月', w1Revenue: 48439, w2Revenue: 73425, w3Revenue: 56385, w4Revenue: 59701, w1Units: 45, w2Units: 64, w3Units: 52, w4Units: 54, w1Returns: 1, w2Returns: 1, w3Returns: 0, w4Returns: 0},
-            {channel: '百貨/門市', month: '2025.05月', w1Revenue: 737811, w2Revenue: 727873, w3Revenue: 368453, w4Revenue: 280074, w1Units: 703, w2Units: 612, w3Units: 342, w4Units: 320, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '經銷商', month: '2025.05月', w1Revenue: 43640, w2Revenue: 349348, w3Revenue: 142117, w4Revenue: 1670, w1Units: 4, w2Units: 8, w3Units: 4, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '特約商', month: '2025.05月', w1Revenue: 301655, w2Revenue: 485405, w3Revenue: 72150, w4Revenue: 6494, w1Units: 9, w2Units: 9, w3Units: 4, w4Units: 2, w1Returns: 0, w2Returns: 1, w3Returns: 0, w4Returns: 0},
-            {channel: '團購主', month: '2025.05月', w1Revenue: 79963, w2Revenue: 29946, w3Revenue: 43206, w4Revenue: 52463, w1Units: 65, w2Units: 14, w3Units: 23, w4Units: 19, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清', month: '2025.05月', w1Revenue: 52657, w2Revenue: 82548, w3Revenue: 0, w4Revenue: 15860, w1Units: 7, w2Units: 3, w3Units: 0, w4Units: 1, w1Returns: 1, w2Returns: 4, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清(OEM)', month: '2025.05月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 7983330, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '公關', month: '2025.05月', w1Revenue: 14280, w2Revenue: 5434, w3Revenue: 0, w4Revenue: 2189, w1Units: 517, w2Units: 30, w3Units: 50, w4Units: 19, w1Returns: 6, w2Returns: 2, w3Returns: 2, w4Returns: 0},
-            {channel: '官網', month: '2025.05月', w1Revenue: 839708, w2Revenue: 3988669, w3Revenue: 850860, w4Revenue: 1345915, w1Units: 643, w2Units: 2378, w3Units: 711, w4Units: 951, w1Returns: 11, w2Returns: 15, w3Returns: 6, w4Returns: 19},
-            {channel: '蝦皮', month: '2025.06月', w1Revenue: 322399, w2Revenue: 293508, w3Revenue: 771769, w4Revenue: 538101, w1Units: 351, w2Units: 330, w3Units: 778, w4Units: 639, w1Returns: 6, w2Returns: 3, w3Returns: 5, w4Returns: 9},
-            {channel: 'MO店+', month: '2025.06月', w1Revenue: 73123, w2Revenue: 43584, w3Revenue: 82656, w4Revenue: 73978, w1Units: 60, w2Units: 35, w3Units: 73, w4Units: 66, w1Returns: 0, w2Returns: 1, w3Returns: 1, w4Returns: 0},
-            {channel: '百貨/門市', month: '2025.06月', w1Revenue: 105605, w2Revenue: 124161, w3Revenue: 85373, w4Revenue: 137459, w1Units: 107, w2Units: 118, w3Units: 88, w4Units: 130, w1Returns: 1, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '經銷商', month: '2025.06月', w1Revenue: 485905, w2Revenue: 232005, w3Revenue: 185302, w4Revenue: 715722, w1Units: 18, w2Units: 13, w3Units: 14, w4Units: 12, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '特約商', month: '2025.06月', w1Revenue: 402940, w2Revenue: 303975, w3Revenue: 278115, w4Revenue: 486989, w1Units: 9, w2Units: 8, w3Units: 6, w4Units: 15, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '團購主', month: '2025.06月', w1Revenue: 40251, w2Revenue: 0, w3Revenue: 8638, w4Revenue: 14608, w1Units: 18, w2Units: 0, w3Units: 10, w4Units: 16, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清', month: '2025.06月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 3255540, w4Revenue: 19504, w1Units: 0, w2Units: 0, w3Units: 1, w4Units: 1, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清(OEM)', month: '2025.06月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 5013419, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '公關', month: '2025.06月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 17, w2Units: 31, w3Units: 90, w4Units: 27, w1Returns: 6, w2Returns: 3, w3Returns: 15, w4Returns: 2},
-            {channel: '官網', month: '2025.06月', w1Revenue: 1284941, w2Revenue: 999065, w3Revenue: 1696161, w4Revenue: 1376501, w1Units: 976, w2Units: 776, w3Units: 1123, w4Units: 1024, w1Returns: 37, w2Returns: 15, w3Returns: 13, w4Returns: 14},
-            {channel: 'MO店+', month: '2025.07月', w1Revenue: 87883, w2Revenue: 80155, w3Revenue: 77619, w4Revenue: 70105, w1Units: 67, w2Units: 67, w3Units: 61, w4Units: 58, w1Returns: 0, w2Returns: 0, w3Returns: 2, w4Returns: 0},
-            {channel: '百貨/門市', month: '2025.07月', w1Revenue: 208010, w2Revenue: 282530, w3Revenue: 269844, w4Revenue: 417858, w1Units: 202, w2Units: 243, w3Units: 221, w4Units: 320, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '經銷商', month: '2025.07月', w1Revenue: 244923, w2Revenue: 305010, w3Revenue: 127941, w4Revenue: 816487, w1Units: 12, w2Units: 11, w3Units: 11, w4Units: 21, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '特約商', month: '2025.07月', w1Revenue: 264040, w2Revenue: 74780, w3Revenue: 209317, w4Revenue: 588794, w1Units: 3, w2Units: 13, w3Units: 17, w4Units: 16, w1Returns: 0, w2Returns: 1, w3Returns: 0, w4Returns: 0},
-            {channel: '團購主', month: '2025.07月', w1Revenue: 0, w2Revenue: 31081, w3Revenue: 0, w4Revenue: 0, w1Units: 0, w2Units: 17, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清', month: '2025.07月', w1Revenue: 764351, w2Revenue: 0, w3Revenue: 939510, w4Revenue: 277024, w1Units: 2, w2Units: 1, w3Units: 2, w4Units: 2, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清(OEM)', month: '2025.07月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 4179869, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '公關', month: '2025.07月', w1Revenue: 0, w2Revenue: 7560, w3Revenue: 0, w4Revenue: 0, w1Units: 20, w2Units: 25, w3Units: 501, w4Units: 64, w1Returns: 1, w2Returns: 5, w3Returns: 2, w4Returns: 1},
-            {channel: '蝦皮', month: '2025.07月', w1Revenue: 510670, w2Revenue: 346352, w3Revenue: 477380, w4Revenue: 641486, w1Units: 562, w2Units: 473, w3Units: 605, w4Units: 705, w1Returns: 4, w2Returns: 13, w3Returns: 14, w4Returns: 14},
-            {channel: '官網', month: '2025.07月', w1Revenue: 516221, w2Revenue: 2054506, w3Revenue: 1602166, w4Revenue: 3745554, w1Units: 394, w2Units: 1535, w3Units: 1269, w4Units: 2468, w1Returns: 21, w2Returns: 19, w3Returns: 14, w4Returns: 52},
-            {channel: '蝦皮', month: '2025.08月', w1Revenue: 659596, w2Revenue: 541081, w3Revenue: 572355, w4Revenue: 721975, w1Units: 734, w2Units: 599, w3Units: 654, w4Units: 929, w1Returns: 11, w2Returns: 5, w3Returns: 12, w4Returns: 15},
-            {channel: 'MO店+', month: '2025.08月', w1Revenue: 68471, w2Revenue: 65161, w3Revenue: 77182, w4Revenue: 71298, w1Units: 56, w2Units: 56, w3Units: 59, w4Units: 59, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 1},
-            {channel: '百貨/門市', month: '2025.08月', w1Revenue: 326235, w2Revenue: 261999, w3Revenue: 259223, w4Revenue: 472272, w1Units: 283, w2Units: 220, w3Units: 214, w4Units: 358, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '經銷商', month: '2025.08月', w1Revenue: 179483, w2Revenue: 187181, w3Revenue: 66345, w4Revenue: 121330, w1Units: 15, w2Units: 8, w3Units: 6, w4Units: 11, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '特約商', month: '2025.08月', w1Revenue: 293005, w2Revenue: 964073, w3Revenue: 1096267, w4Revenue: 756531, w1Units: 7, w2Units: 12, w3Units: 15, w4Units: 14, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '團購主', month: '2025.08月', w1Revenue: 19169, w2Revenue: 46529, w3Revenue: 12678, w4Revenue: 22439, w1Units: 9, w2Units: 20, w3Units: 9, w4Units: 16, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清', month: '2025.08月', w1Revenue: 357900, w2Revenue: 103936, w3Revenue: 7525, w4Revenue: 18840, w1Units: 2, w2Units: 3, w3Units: 1, w4Units: 1, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清(OEM)', month: '2025.08月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '公關', month: '2025.08月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 38, w2Units: 31, w3Units: 31, w4Units: 68, w1Returns: 0, w2Returns: 1, w3Returns: 0, w4Returns: 0},
-            {channel: '官網', month: '2025.08月', w1Revenue: 2076359, w2Revenue: 1621489, w3Revenue: 1722447, w4Revenue: 1921015, w1Units: 1481, w2Units: 1399, w3Units: 1266, w4Units: 1475, w1Returns: 22, w2Returns: 35, w3Returns: 0, w4Returns: 28},
-            {channel: '蝦皮', month: '2025.09月', w1Revenue: 647559, w2Revenue: 784974, w3Revenue: 632253, w4Revenue: 758781, w1Units: 783, w2Units: 904, w3Units: 744, w4Units: 885, w1Returns: 16, w2Returns: 13, w3Returns: 15, w4Returns: 12},
-            {channel: 'MO店+', month: '2025.09月', w1Revenue: 66801, w2Revenue: 65061, w3Revenue: 77924, w4Revenue: 84622, w1Units: 57, w2Units: 58, w3Units: 72, w4Units: 68, w1Returns: 0, w2Returns: 3, w3Returns: 0, w4Returns: 0},
-            {channel: '百貨/門市', month: '2025.09月', w1Revenue: 366736, w2Revenue: 321010, w3Revenue: 341058, w4Revenue: 783091, w1Units: 285, w2Units: 250, w3Units: 188, w4Units: 402, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '經銷商', month: '2025.09月', w1Revenue: 152380, w2Revenue: 175414, w3Revenue: 461462, w4Revenue: 181120, w1Units: 17, w2Units: 15, w3Units: 15, w4Units: 15, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '特約商', month: '2025.09月', w1Revenue: 602889, w2Revenue: 242388, w3Revenue: 310802, w4Revenue: 686894, w1Units: 10, w2Units: 18, w3Units: 8, w4Units: 17, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '團購主', month: '2025.09月', w1Revenue: 20767, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 15, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清', month: '2025.09月', w1Revenue: 0, w2Revenue: 1645236, w3Revenue: 929370, w4Revenue: 24630, w1Units: 1, w2Units: 2, w3Units: 2, w4Units: 1, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清(OEM)', month: '2025.09月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '公關', month: '2025.09月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 32, w2Units: 20, w3Units: 25, w4Units: 32, w1Returns: 0, w2Returns: 3, w3Returns: 1, w4Returns: 0},
-            {channel: '官網', month: '2025.09月', w1Revenue: 2586256, w2Revenue: 1631443, w3Revenue: 1616147, w4Revenue: 2267805, w1Units: 1741, w2Units: 1286, w3Units: 1345, w4Units: 1656, w1Returns: 17, w2Returns: 32, w3Returns: 30, w4Returns: 28},
-            {channel: '蝦皮', month: '2025.10月', w1Revenue: 436743, w2Revenue: 767199, w3Revenue: 673877, w4Revenue: 1038686, w1Units: 529, w2Units: 875, w3Units: 852, w4Units: 1217, w1Returns: 0, w2Returns: 1, w3Returns: 13, w4Returns: 49},
-            {channel: 'MO店+', month: '2025.10月', w1Revenue: 40122, w2Revenue: 90053, w3Revenue: 70167, w4Revenue: 128207, w1Units: 39, w2Units: 70, w3Units: 64, w4Units: 127, w1Returns: 0, w2Returns: 0, w3Returns: 1, w4Returns: 1},
-            {channel: '百貨/門市', month: '2025.10月', w1Revenue: 216494, w2Revenue: 419945, w3Revenue: 340155, w4Revenue: 481826, w1Units: 173, w2Units: 330, w3Units: 222, w4Units: 380, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '經銷商', month: '2025.10月', w1Revenue: 98505, w2Revenue: 74271, w3Revenue: 159215, w4Revenue: 471444, w1Units: 5, w2Units: 5, w3Units: 14, w4Units: 25, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '特約商', month: '2025.10月', w1Revenue: 401303, w2Revenue: 276427, w3Revenue: 545593, w4Revenue: 595243, w1Units: 8, w2Units: 10, w3Units: 12, w4Units: 21, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '團購主', month: '2025.10月', w1Revenue: 18772, w2Revenue: 120698, w3Revenue: 43478, w4Revenue: 35241, w1Units: 6, w2Units: 65, w3Units: 23, w4Units: 18, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清', month: '2025.10月', w1Revenue: 117770, w2Revenue: 46964, w3Revenue: 0, w4Revenue: 0, w1Units: 3, w2Units: 2, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '阿清(OEM)', month: '2025.10月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 8691218, w1Units: 0, w2Units: 0, w3Units: 0, w4Units: 0, w1Returns: 0, w2Returns: 0, w3Returns: 0, w4Returns: 0},
-            {channel: '公關', month: '2025.10月', w1Revenue: 0, w2Revenue: 0, w3Revenue: 0, w4Revenue: 0, w1Units: 20, w2Units: 11, w3Units: 20, w4Units: 67, w1Returns: 0, w2Returns: 1, w3Returns: 0, w4Returns: 2},
-            {channel: '官網', month: '2025.10月', w1Revenue: 1035128, w2Revenue: 1657025, w3Revenue: 1461247, w4Revenue: 2105709, w1Units: 769, w2Units: 1229, w3Units: 1055, w4Units: 1565, w1Returns: 0, w2Returns: 0, w3Returns: 20, w4Returns: 120}
+        const monthlyRevenue = {"2024-01":{"官網":5104320.949471341,"團購主":759395.2380925238,"特約商":601364.2857164762,"百貨/門市":181410.47498566651,"公關":0.0,"經銷商":598095.238094524,"蝦皮":523679.99964300415,"阿清":6679388.571182571},"2024-02":{"官網":5102705.7119791275,"特約商":68476.19047609522,"百貨/門市":676230.3790754753,"公關":0.0,"蝦皮":497715.2376729994,"團購主":57976.15904899998,"經銷商":422900.47618557146},"2024-03":{"團購主":289942.81809809525,"官網":6053699.042942759,"特約商":288618.57160176185,"百貨/門市":568362.8345538088,"公關":0.0,"蝦皮":665807.6184440057,"阿清":1841842.85714281,"經銷商":923104.7619018569},"2024-04":{"團購主":252290.4762192381,"特約商":282555.714285762,"百貨/門市":849569.5232894704,"官網":4929631.423740898,"公關":0.0,"蝦皮":721393.3325700033,"經銷商":597734.2857130481,"阿清":3955910.4761916157},"2024-05":{"團購主":403119.0478156668,"特約商":386443.09530795226,"公關":303466.6663709997,"百貨/門市":692725.7139880923,"官網":7122284.754715069,"蝦皮":828927.618112007,"經銷商":599784.2868569045,"阿清":2396383.809524},"2024-06":{"團購主":226776.17779180958,"公關":533.3333333333339,"特約商":568610.0007880952,"百貨/門市":834808.5714200046,"官網":4604703.809705152,"蝦皮":1156981.9047359708,"經銷商":689547.6208059046,"阿清":93894.28571485713},"2024-07":{"團購主":320123.8115078571,"公關":887557.2619209969,"特約商":345700.47888561897,"經銷商":896484.7652171904,"百貨/門市":301132.3809205258,"官網":7258123.809798635,"阿清":3591219.9999993816,"蝦皮":899459.9999622923},"2024-08":{"團購主":380423.81420400017,"特約商":344561.43336499995,"百貨/門市":715759.999934952,"官網":6180643.809479822,"公關":0.0,"蝦皮":878704.7618257212,"經銷商":579038.1028074761,"阿清":103400.00000342858},"2024-09":{"團購主":295690.4792751905,"特約商":279668.576654143,"百貨/門市":622402.8571446191,"官網":7037166.904607571,"公關":20785.219048,"蝦皮":996862.8475690077,"經銷商":539445.7211351428,"阿清":6098602.85714381},"2024-10":{"團購主":441651.43333900056,"特約商":219974.287988762,"公關":883.8,"百貨/門市":567001.9047345251,"官網":6647259.047761738,"經銷商":711497.6289879523,"蝦皮":1011898.0951600112,"阿清":57626.666736714295},"2024-11":{"公關":720.0,"團購主":595252.3882560002,"特約商":187945.24027623815,"百貨/門市":686719.999964288,"官網":12580100.952259539,"經銷商":819178.5774278577,"蝦皮":1386708.5713870255,"阿清":2123331.4285701904},"2024-12":{"公關":788.571428571429,"團購主":782832.3919541427,"特約商":327080.00477166666,"百貨/門市":1059604.7618630931,"官網":4997430.821461231,"經銷商":395021.1959493808,"阿清":1567716.1904769049,"蝦皮":936340.9523415823},"2025-01":{"團購主":754694.2968656669,"公關":0.0,"百貨/門市":530102.8570841419,"官網":6981971.414040531,"特約商":305892.38359328575,"經銷商":338628.57626347616,"蝦皮":966331.7142040078,"阿清":260228.5714285714},"2025-02":{"團購主":516946.71751966677,"特約商":1044782.1508445719,"公關":0.0,"官網":5557852.380824414,"百貨/門市":527472.3809231912,"經銷商":554994.294908095,"蝦皮":944675.2380669918,"MO店+":1915.238096380953},"2025-03":{"團購主":546271.8150990001,"特約商":673192.450262,"公關":0.0,"百貨/門市":902003.2075119521,"官網":6446803.809582305,"經銷商":793447.8697844761,"蝦皮":983091.4285568951,"MO店+":267146.6666720001,"員購":18423.333331904763,"阿清":6756759.999999669},"2025-04":{"團購主":185784.99150699985,"特約商":750842.8626032387,"百貨/門市":1640581.143006725,"公關":0.0,"官網":5031799.047795149,"蝦皮":1220520.9715085928,"經銷商":456411.4211338093,"MO店+":322821.9047830001,"員購":16799.999997761905,"阿清":1356672.7847608097},"2025-05":{"團購主":388364.506425,"經銷商":476995.2429,"百貨/門市":2013533.90482709,"公關":20860.0,"特約商":631903.3353030479,"官網":6690620.9570695385,"MO店+":226619.0476389999,"蝦皮":1106207.5904550257,"員購":33827.619027238106,"阿清":143871.428571},"2025-06":{"公關":0.0,"團購主":574039.9390820477,"特約商":888355.7226330003,"百貨/門市":431045.04775690363,"官網":5101588.571888231,"蝦皮":1868433.3329958993,"經銷商":1265721.9198197147,"員購":247119.04941838083,"MO店+":260324.76192199995,"阿清":3119089.383238714},"2025-07":{"特約商":1080324.762440668,"百貨/門市":1122135.0476883317,"公關":7200.0,"官網":7541378.0977053195,"MO店+":300725.71429714275,"員購":67968.33352428574,"經銷商":1352499.2896290016,"蝦皮":1881798.104589993,"團購主":29600.952378,"阿清":1886557.005524476},"2025-08":{"員購":17209.523825999997,"公關":0.0,"百貨/門市":1256884.857386135,"官網":6991724.179023837,"特約商":2960286.9003272867,"MO店+":268678.09525800036,"蝦皮":2431520.9623121615,"團購主":96014.28571400006,"經銷商":510732.0489549523,"阿清":464953.33333347616},"2025-09":{"特約商":1755212.3400659044,"百貨/門市":1561525.4283118998,"公關":0.0,"官網":7715858.134084701,"員購":173421.18151999984,"經銷商":909198.0964739048,"蝦皮":2723888.5942560975,"MO店+":280388.5714360001,"團購主":19778.095237999998,"阿清":2475462.8571425714},"2025-10":{"公關":0.0,"特約商":1731967.6131495233,"經銷商":749923.3344130001,"員購":310362.95285314345,"百貨/門市":1093859.9998754244,"官網":5969430.502038066,"團購主":207799.04762700025,"蝦皮":2777623.810217166,"MO店+":312903.8095360003,"阿清":156889.52380919046},"2025-11":{"公關":0.0,"特約商":1130705.7116719994,"員購":290151.38143009605,"百貨/門市":1789847.1427146262,"官網":14679984.93194866,"經銷商":1324275.238090713,"蝦皮":3493441.9050991833,"MO店+":771971.4285649998,"團購主":115762.457155524,"阿清":5165308.57142876},"2025-12":{"經銷商":1176014.285952905,"員購":151525.45590228512,"百貨/門市":1371751.5715387631,"官網":4267660.000055235,"公關":0.0,"特約商":1725569.5201539057,"MO店+":359985.7142800003,"蝦皮":2716543.8098762855,"團購主":77904.7619092381,"阿清":60237.142855},"2026-01":{"公關":0.0,"員購":255392.19103904694,"百貨/門市":1249929.1429222866,"蝦皮":2623538.1240693396,"官網":4802361.904575167,"經銷商":1477753.3390092852,"阿清":4423446.666827379,"MO店+":272700.0000126191,"團購主":567256.1905172892,"特約商":1101712.3807528566},"2026-02":{"特約商":723016.1885918095,"員購":260549.8955217143,"公關":0.0,"百貨/門市":1387414.3808259605,"經銷商":551516.1905219998,"官網":4666525.723488164,"MO店+":258459.0476280002,"蝦皮":2118090.3619581787,"團購主":228037.1428513333},"2026-03":{"特約商":1855157.1420862852,"員購":35833.42856271428,"經銷商":1019058.095887619,"百貨/門市":1159642.0952614981,"官網":4320988.579581492,"MO店+":357186.66666399984,"蝦皮":2223647.610815071,"團購主":202654.28571700017,"公關":0.0,"阿清":1306329.5238071424},"2026-04":{"蝦皮":962420.9769676758,"官網":1282691.456593022,"團購主":50978.09524200002,"MO店+":183178.09523600005,"特約商":1437105.7110577615,"百貨/門市":304492.3809512382,"公關":0.0,"經銷商":926303.8120074285,"員購":3590.4761927142945}};
+        const monthlyUnits = {"2024-01":{"官網":25257,"團購主":4119,"特約商":3206,"百貨/門市":1225,"公關":1983,"經銷商":2844,"蝦皮":2063,"阿清":61995},"2024-02":{"官網":21525,"特約商":351,"百貨/門市":4663,"公關":827,"蝦皮":1863,"團購主":391,"經銷商":2112},"2024-03":{"團購主":1690,"官網":25369,"特約商":1400,"百貨/門市":3099,"公關":1749,"蝦皮":2465,"阿清":29332,"經銷商":4379},"2024-04":{"團購主":1310,"特約商":1445,"百貨/門市":4278,"官網":20029,"公關":583,"蝦皮":2683,"經銷商":2844,"阿清":25995},"2024-05":{"團購主":2312,"特約商":1862,"公關":65081,"百貨/門市":3568,"官網":31605,"蝦皮":3428,"經銷商":2871,"阿清":15667},"2024-06":{"團購主":1264,"公關":752,"特約商":1788,"百貨/門市":4732,"官網":18516,"蝦皮":4891,"經銷商":3471,"阿清":578},"2024-07":{"團購主":1790,"公關":3972,"特約商":1907,"經銷商":4112,"百貨/門市":2767,"官網":30885,"阿清":20618,"蝦皮":3635},"2024-08":{"團購主":1995,"特約商":1478,"百貨/門市":3735,"官網":20199,"公關":1213,"蝦皮":3343,"經銷商":2842,"阿清":661},"2024-09":{"團購主":1513,"特約商":1326,"百貨/門市":3521,"官網":23186,"公關":2050,"蝦皮":3595,"經銷商":2691,"阿清":34480},"2024-10":{"團購主":2218,"特約商":1441,"公關":4146,"百貨/門市":3018,"官網":24893,"經銷商":3347,"蝦皮":3833,"阿清":349},"2024-11":{"公關":29208,"團購主":2894,"特約商":909,"百貨/門市":3469,"官網":56952,"經銷商":3871,"蝦皮":5841,"阿清":10961},"2024-12":{"公關":1138,"團購主":4003,"特約商":1571,"百貨/門市":8777,"官網":19151,"經銷商":1828,"阿清":8401,"蝦皮":3611},"2025-01":{"團購主":3780,"公關":2330,"百貨/門市":4013,"官網":33042,"特約商":1548,"經銷商":1600,"蝦皮":4080,"阿清":1687},"2025-02":{"團購主":11607,"特約商":9724,"公關":1165,"官網":25889,"百貨/門市":5370,"經銷商":2641,"蝦皮":3901,"MO店+":8},"2025-03":{"團購主":3493,"特約商":3500,"公關":2720,"百貨/門市":15573,"官網":29018,"經銷商":3872,"蝦皮":4270,"MO店+":833,"員購":166,"阿清":40911},"2025-04":{"團購主":969,"特約商":4402,"百貨/門市":10067,"公關":6240,"官網":21500,"蝦皮":5623,"經銷商":2476,"MO店+":994,"員購":283,"阿清":15766},"2025-05":{"團購主":2040,"經銷商":2055,"百貨/門市":15638,"公關":7695,"特約商":8908,"官網":30963,"MO店+":728,"蝦皮":4505,"員購":346,"阿清":724},"2025-06":{"公關":3617,"團購主":2969,"特約商":5632,"百貨/門市":2726,"官網":23893,"蝦皮":8909,"經銷商":5621,"員購":1472,"MO店+":845,"阿清":31457},"2025-07":{"特約商":5372,"百貨/門市":6264,"公關":3976,"官網":33615,"MO店+":930,"員購":422,"經銷商":6012,"蝦皮":9688,"團購主":116,"阿清":12331},"2025-08":{"員購":137,"公關":10627,"百貨/門市":11251,"官網":28170,"特約商":13109,"MO店+":957,"蝦皮":12554,"團購主":341,"經銷商":2545,"阿清":1202},"2025-09":{"特約商":8700,"百貨/門市":11295,"公關":8326,"官網":31741,"員購":1020,"經銷商":4174,"蝦皮":14546,"MO店+":887,"團購主":75,"阿清":11107},"2025-10":{"公關":6247,"特約商":12130,"經銷商":3516,"員購":1877,"百貨/門市":9537,"官網":23232,"團購主":897,"蝦皮":15036,"MO店+":1005,"阿清":568},"2025-11":{"公關":1975,"特約商":5620,"員購":1581,"百貨/門市":11826,"官網":65586,"經銷商":6194,"蝦皮":18005,"MO店+":2584,"團購主":487,"阿清":27287},"2025-12":{"經銷商":4936,"員購":910,"百貨/門市":13091,"官網":16558,"公關":2031,"特約商":9323,"MO店+":1206,"蝦皮":14169,"團購主":344,"阿清":254},"2026-01":{"公關":7665,"員購":1697,"百貨/門市":8086,"蝦皮":13739,"官網":22348,"經銷商":7896,"阿清":26514,"MO店+":941,"團購主":2566,"特約商":6055},"2026-02":{"特約商":4556,"員購":1499,"公關":4277,"百貨/門市":6873,"經銷商":3049,"官網":19735,"MO店+":956,"蝦皮":10666,"團購主":1014},"2026-03":{"特約商":9522,"員購":248,"經銷商":5855,"百貨/門市":7164,"官網":18205,"MO店+":1661,"蝦皮":10121,"團購主":841,"公關":1907,"阿清":4916},"2026-04":{"蝦皮":5389,"官網":5668,"團購主":244,"MO店+":978,"特約商":9886,"百貨/門市":3500,"公關":910,"經銷商":4298,"員購":89}};
+
+        // New data: Annual targets
+        const annualTargets = {
+            '電商': {target: 150000000, channels: ['官網', '蝦皮', 'MO店+']},
+            '門市百貨': {target: 17000000, channels: ['百貨/門市']},
+            '團購': {target: 5000000, channels: ['團購主']},
+            '經銷': {target: 50000000, channels: ['經銷商', '特約商', '員購']}
+        };
+        const totalTarget = 220000000;
+
+        // Top 10 products data
+        const topProducts = [
+            {name: '洗衣精補充瓶800ml', revenue: 8723365, quantity: 25189},
+            {name: '洗衣精800ml', revenue: 6739461, quantity: 19868},
+            {name: '食器清潔皂補充瓶500ml', revenue: 3335329, quantity: 13860},
+            {name: '濃縮家事皂700ml', revenue: 2712018, quantity: 7545},
+            {name: '【新版】速效除垢慕斯500ml', revenue: 2099934, quantity: 6906},
+            {name: '除黴凝膠150ml', revenue: 2054560, quantity: 10742},
+            {name: '【新版】真濃縮洗衣精-棉花香800ml', revenue: 2031638, quantity: 4783},
+            {name: '食器清潔皂500ml', revenue: 1741653, quantity: 7552},
+            {name: '沐浴慕斯(棉花)600ml', revenue: 1568579, quantity: 2998},
+            {name: '除垢慕斯 500ML 補充瓶', revenue: 1451210, quantity: 6664}
         ];
 
-        const april2026Data = {
-            channels: [
-                {name: '淨淨官網', revenue: 1017251, share: 21.3, w1: 915501, w2: 101750},
-                {name: '蝦皮通路', revenue: 856508, share: 17.9, w1: 612913, w2: 243595},
-                {name: 'MO店+', revenue: 128220, share: 2.7, w1: 99000, w2: 29220},
-                {name: '百貨/門市', revenue: 287746, share: 6.0, w1: 197837, w2: 89909},
-                {name: '經銷商', revenue: 941484, share: 19.7, w1: 509172, w2: 432312},
-                {name: '特約商', revenue: 1487971, share: 31.2, w1: 1343210, w2: 144761},
-                {name: '團購主', revenue: 52226, share: 1.1, w1: 40000, w2: 12226},
-                {name: 'Mei姐直播', revenue: 5866, share: 0.1, w1: 5866, w2: 0}
-            ],
-            total: 4771406,
-            daysElapsed: 10,
-            daysInMonth: 30,
-            cogsRatio: 0.489,
-            grossMargin: 0.511,
-            w1Total: 3827306,
-            w2Total: 1094180,
-            projectedMonthly: 14314218
-        };
+        const subMonthly = {"團購主":{"2024-01":{"樂鎂國際":759395.2380925238},"2024-02":{"樂鎂國際":52947.619048999986,"林燕鄉":5028.54},"2024-03":{"樂鎂國際":283695.23809809523,"林燕鄉":6247.58},"2024-04":{"樂鎂國際":252290.4762192381},"2024-05":{"樂鎂國際":403119.0478156668},"2024-06":{"樂鎂國際":224642.85779180957,"林燕鄉":2133.32},"2024-07":{"樂鎂國際":320123.8115078571},"2024-08":{"樂鎂國際":380423.81420400017},"2024-09":{"樂鎂國際":295690.4792751905},"2024-10":{"樂鎂國際":401647.6238170002,"森哥媽咪限定團":40003.80952200002},"2024-11":{"樂鎂國際":595252.3882560002},"2024-12":{"樂鎂國際":740685.7252881429,"森哥媽咪限定團":42146.666666000005},"2025-01":{"樂鎂國際":646147.630186667,"桃":65594.28572299996,"婷萱":27006.66667,"森哥媽咪限定團":15945.714286},"2025-02":{"樂鎂國際":492711.43180252373,"AMA SHOP":24235.285717142866},"2025-03":{"樂鎂國際":516756.1770040001,"AMA SHOP":29515.638094999995},"2025-04":{"樂鎂國際":95261.90578700001,"森哥媽咪限定團":57364.76190499999,"韓國黃太太":6840.000001,"AMA SHOP":26318.323814000003},"2025-05":{"樂鎂國際":192576.192127,"桃":119633.33333699992,"AMA SHOP":69946.4095319999,"我是一個豪老師":4872.380953000001,"菲菲":1336.190476},"2025-06":{"樂鎂國際":513566.6724160001,"桃":38334.28571900001,"AMA SHOP":22138.98094704762},"2025-07":{"森哥媽咪限定團":29600.952378,"樂鎂國際":0.0},"2025-08":{"新寶媽":26782.857145000013,"蓉蓉":5956.190477,"桃":27548.57142700001,"天兵媽與小元寶":31466.666664999997,"Sam":4260.0},"2025-09":{"Sam":19778.095237999998},"2025-10":{"桃":33562.85714799998,"森哥媽咪限定團":44396.19047599998,"VK":129840.00000299994},"2025-11":{"鐵喬":31554.285718999996,"妤婷Yuting":12942.857142,"呂爸":5369.523809,"AMA SHOP":65895.79048552384},"2025-12":{"鐵喬":38492.38095500001,"Yayu Chang":16072.380953000004,"APPLE":5410.476192,"雀莉":10154.285713999998,"小湘":1180.0,"AMA SHOP":6595.238095238101},"2026-01":{"小赫頂頂":138187.61903600034,"柯南":72292.38095500007,"桃":38990.47619199998,"鐵喬":27944.76190499999,"雀莉":45258.09524299999,"YOYO":12247.619045000001,"依秦":43002.857148,"APPLE":13743.809526000003,"Dora":16581.904762000002,"Abee":19793.333337,"蒸菜夫妻":2618.095239,"Stella":24970.47619299999,"海倫日記":1312.380952,"哈比小妃":1093.333333,"AMA SHOP":109219.0476512858},"2026-02":{"柯南":39188.571435,"天兵媽與小元寶":25865.71428633333,"小赫頂頂":110061.90475200028,"VINA":19944.761903000002,"依依":2136.1904769999996,"森哥媽咪限定團":30839.99999800001},"2026-03":{"小團媽":2287.619048,"EmiLiA":31656.190479999997,"馬麻Susan":2779.047619,"安可星球":39785.71428900002,"閃點半導體":11348.57143,"森哥媽咪限定團":20196.190477999997,"小赫頂頂":83521.90475300013,"VINA":5531.428572,"呂爸":5547.6190480000005},"2026-04":{"Ting":37707.619051999995,"VICKY":13270.476190000005}},"百貨/門市":{"2024-01":{"櫃位快閃":181410.47498566651},"2024-02":{"櫃位快閃":676230.3790754753},"2024-03":{"櫃位快閃":568362.8345538088},"2024-04":{"櫃位快閃":849569.5232894704},"2024-05":{"櫃位快閃":692725.7139880923},"2024-06":{"櫃位快閃":834808.5714200046},"2024-07":{"櫃位快閃":301132.3809205258},"2024-08":{"櫃位快閃":715759.999934952},"2024-09":{"櫃位快閃":622402.8571446191},"2024-10":{"櫃位快閃":567001.9047345251},"2024-11":{"櫃位快閃":358249.52379128506,"新竹巨城":316941.9047449993,"文心秀泰":11528.571427999996},"2024-12":{"文心秀泰":268061.9047499518,"新竹巨城":791542.8571131441},"2025-01":{"台中新光":254419.99997614254,"櫃位快閃":0.0,"文心秀泰":96513.333325,"台中大遠":179169.5237829999},"2025-02":{"櫃位快閃":0.0,"台中大遠":360369.5237718564,"台中新光":84326.66668099984,"台北忠孝":82776.19047033327,"高雄漢神":0.0},"2025-03":{"高雄漢神":461878.09516200225,"一樓店面":307579.3980589572,"台北忠孝":132545.71429100033},"2025-04":{"高雄漢神":388329.52373090456,"新竹巨城":532135.2380099988,"台中lala":581189.5237419967,"一樓店面":138926.85752380933},"2025-05":{"一樓店面":121034.85723809531,"高雄漢神":408153.3333109992,"新竹巨城":430890.4761670003,"高雄夢時":553952.3809820038,"台中lala":499502.8571289983},"2025-06":{"一樓店面":149937.42876190422,"高雄漢神":281107.6189949999},"2025-07":{"一樓店面":165613.1430476188,"高雄漢神":294659.99995971436,"台南南紡":661861.9046809997},"2025-08":{"高雄漢神":410766.66662395187,"台南南紡":561840.952285999,"一樓店面":284277.23847619025},"2025-09":{"一樓店面":121608.28561904773,"台南南紡":634944.7618259996,"台中lala":581303.8094420005,"高雄夢時":223668.57142485736},"2025-10":{"台中lala":469239.99992799916,"一樓店面":0.0,"高雄夢時":560069.523767429,"台北忠孝":64550.476180000056},"2025-11":{"台北忠孝":228013.33331299998,"新竹巨城":501635.2380617149,"台中lala":755374.285652997,"高雄夢時":294552.38092500006,"一樓店面":10271.904761904761},"2025-12":{"一樓店面":33661.143047619036,"高雄夢時":55891.42857123809,"新竹巨城":688543.7618786177,"板橋大遠":199433.33332000012,"台中lala":394221.90472128487},"2026-01":{"一樓店面":25447.23828571427,"林口三井":375226.66661057214,"板橋大遠":28025.714288,"台南南紡":416326.6666350002,"台中lala":404902.8571029995},"2026-02":{"一樓店面":14837.2380952381,"林口三井":431719.0475826187,"台南南紡":493636.1904367617,"台中lala":447221.90471133316},"2026-03":{"一樓店面":197325.9048522858,"林口三井":342808.57139880967,"台南南紡":303005.7142733335,"台中lala":316501.9047370476},"2026-04":{"台南南紡":100723.80952199978,"台中lala":93178.0952399998,"一樓店面":110590.4761892378,"林口三井":0.0}}};
 
-        const channelColors = {
-            '官網': '#3B82C4', '淨淨官網': '#3B82C4',
-            '蝦皮': '#F0985A', '蝦皮通路': '#F0985A',
-            'MO店+': '#E8746A',
-            '百貨/門市': '#9B7DC4',
-            '經銷商': '#5BB5A2',
-            '特約商': '#E8C556',
-            '團購主': '#D4739D',
-            '阿清': '#6B8FCC',
-            '阿清(OEM)': '#4ABED0',
-            '公關': '#95A5A6',
-            'Mei姐直播': '#FF7EB3'
-        };
+        // Monthly returns data
+        const monthlyReturns = {"2024-01": {"sales_count": 21623, "returns_count": 201, "return_qty": 264}, "2024-02": {"sales_count": 18419, "returns_count": 214, "return_qty": 290}, "2024-03": {"sales_count": 23522, "returns_count": 270, "return_qty": 386}, "2024-04": {"sales_count": 21480, "returns_count": 246, "return_qty": 346}, "2024-05": {"sales_count": 29819, "returns_count": 210, "return_qty": 294}, "2024-06": {"sales_count": 21862, "returns_count": 169, "return_qty": 270}, "2024-07": {"sales_count": 30685, "returns_count": 293, "return_qty": 418}, "2024-08": {"sales_count": 20500, "returns_count": 293, "return_qty": 409}, "2024-09": {"sales_count": 21494, "returns_count": 291, "return_qty": 409}, "2024-10": {"sales_count": 23002, "returns_count": 218, "return_qty": 519}, "2024-11": {"sales_count": 44430, "returns_count": 287, "return_qty": 495}, "2024-12": {"sales_count": 21520, "returns_count": 290, "return_qty": 460}, "2025-01": {"sales_count": 30645, "returns_count": 185, "return_qty": 271}, "2025-02": {"sales_count": 23068, "returns_count": 306, "return_qty": 424}, "2025-03": {"sales_count": 28130, "returns_count": 297, "return_qty": 490}, "2025-04": {"sales_count": 28041, "returns_count": 313, "return_qty": 660}, "2025-05": {"sales_count": 34358, "returns_count": 216, "return_qty": 342}, "2025-06": {"sales_count": 27448, "returns_count": 294, "return_qty": 442}, "2025-07": {"sales_count": 39227, "returns_count": 412, "return_qty": 622}, "2025-08": {"sales_count": 38674, "returns_count": 330, "return_qty": 443}, "2025-09": {"sales_count": 43046, "returns_count": 410, "return_qty": 585}, "2025-10": {"sales_count": 37098, "returns_count": 533, "return_qty": 746}, "2025-11": {"sales_count": 66745, "returns_count": 445, "return_qty": 715}, "2025-12": {"sales_count": 30589, "returns_count": 485, "return_qty": 658}, "2026-01": {"sales_count": 37242, "returns_count": 180, "return_qty": 269}, "2026-02": {"sales_count": 30323, "returns_count": 202, "return_qty": 261}, "2026-03": {"sales_count": 28369, "returns_count": 353, "return_qty": 511}, "2026-04": {"sales_count": 10508, "returns_count": 92, "return_qty": 133}};
 
-        let charts = {};
-        let selectedMonth = '2025.10月';
-        let selectedChannel = '';
-        let selectedWeeklyMonth = '2025.10月';
+        const allMonths = Object.keys(monthlyRevenue).sort();
+        const currentMonth = '2026-04';
+        const currentMonthIndex = allMonths.indexOf(currentMonth);
+        let selectedMonth = currentMonth;
+        let selectedChannel = 'all';
 
+        // Utility functions
         function formatCurrency(value) {
             return 'NT$ ' + Math.round(value).toLocaleString('zh-TW');
         }
 
-        function getMonthData(month) {
-            return rawData.filter(d => d.month === month);
-        }
-
-        function getChannelData(month, channel) {
-            const monthData = getMonthData(month);
-            return channel ? monthData.filter(d => d.channel === channel) : monthData;
-        }
-
-        function getChannels() {
-            const channels = new Set(rawData.map(d => d.channel));
-            return Array.from(channels).sort((a, b) => {
-                const orderMap = {'官網': 0, '蝦皮': 1, 'MO店+': 2, '百貨/門市': 3, '經銷商': 4, '特約商': 5, '團購主': 6, '阿清': 7, '阿清(OEM)': 8, '公關': 9};
-                return (orderMap[a] ?? 10) - (orderMap[b] ?? 10);
-            });
-        }
-
-        function calculateMonthlyRevenue(month) {
-            return getMonthData(month).reduce((sum, d) => sum + d.w1Revenue + d.w2Revenue + d.w3Revenue + d.w4Revenue, 0);
-        }
-
-        function calculateChannelRevenue(month, channel) {
-            const data = getChannelData(month, channel);
-            return data.reduce((sum, d) => sum + d.w1Revenue + d.w2Revenue + d.w3Revenue + d.w4Revenue, 0);
-        }
-
-        function animateCounter(element, targetValue, duration = 1000) {
-            const startValue = 0;
-            const startTime = Date.now();
-            const update = () => {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const currentValue = Math.round(startValue + (targetValue - startValue) * progress);
-                element.textContent = formatCurrency(currentValue);
-                if (progress < 1) requestAnimationFrame(update);
+        function getChannelColor(channel) {
+            const colors = {
+                '官網': '#3B82C4', '蝦皮': '#F0985A', '阿清': '#6B8FCC',
+                '百貨/門市': '#9B7DC4', '特約商': '#5BB5A2', '經銷商': '#E8746A',
+                'MO店+': '#E8746A', '公關': '#95A5A6', '員購': '#78909C', '團購主': '#E8C556'
             };
-            update();
+            return colors[channel] || '#5CC8D7';
         }
 
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('tab-' + tabName).classList.add('active');
-            event.target.classList.add('active');
-            setTimeout(() => {
-                Object.values(charts).forEach(chart => chart.resize?.());
-            }, 100);
-        }
-
-        function updateTabsData() {
-            updateRevenueOverview();
-            updateChannelAnalysis();
-            updateWeeklyTrends();
-            updateReturnsAnalysis();
-        }
-
-        function updateRevenueOverview() {
-            const monthData = getChannelData(selectedMonth, selectedChannel);
-            const channels = getChannels().filter(ch => !selectedChannel || ch === selectedChannel);
-
-            let html = '';
-            channels.forEach(ch => {
-                const chData = monthData.find(d => d.channel === ch);
-                if (!chData) return;
-
-                const revenue = chData.w1Revenue + chData.w2Revenue + chData.w3Revenue + chData.w4Revenue;
-                const prevMonths = rawData.filter(d => d.channel === ch && d.month !== selectedMonth).slice(-3);
-                const prevRevenues = prevMonths.map(d => d.w1Revenue + d.w2Revenue + d.w3Revenue + d.w4Revenue);
-
-                let momChange = 0;
-                if (prevRevenues.length > 0) {
-                    const prevAvg = prevRevenues.reduce((a, b) => a + b) / prevRevenues.length;
-                    if (prevAvg > 0) momChange = ((revenue - prevAvg) / prevAvg) * 100;
-                }
-
-                const sparklineValues = [...prevRevenues, revenue];
-                const maxValue = Math.max(...sparklineValues);
-                const sparklinePoints = sparklineValues.map((v, i) =>
-                    `${(i / (sparklineValues.length - 1)) * 100},${100 - (v / maxValue) * 100}`
-                ).join(' ');
-
-                const color = channelColors[ch] || '#999';
-
-                html += `
-                    <div class="channel-card">
-                        <div class="channel-name">
-                            <span class="channel-dot" style="background: ${color}"></span>
-                            ${ch}
-                        </div>
-                        <div class="channel-revenue">${formatCurrency(revenue)}</div>
-                        <div class="channel-change">
-                            <span class="${momChange >= 0 ? 'change-positive' : 'change-negative'}">
-                                ${momChange >= 0 ? '↑' : '↓'} ${Math.abs(momChange).toFixed(1)}%
-                            </span>
-                        </div>
-                        <svg class="sparkline" viewBox="0 0 100 40" preserveAspectRatio="none">
-                            <polyline points="${sparklinePoints}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                `;
-            });
-
-            document.getElementById('channelCardsContainer').innerHTML = html;
-
-            const totalRevenue = calculateMonthlyRevenue(selectedMonth);
-            animateCounter(document.getElementById('totalRevenueValue'), totalRevenue);
-
-            renderRevenueLineChart();
-            renderRevenueBarChart();
-        }
-
-        function renderRevenueLineChart() {
-            const months = ['2025.01月', '2025.02月', '2025.03月', '2025.04月', '2025.05月', '2025.06月', '2025.07月', '2025.08月', '2025.09月', '2025.10月'];
-            const revenues = months.map(m => calculateMonthlyRevenue(m));
-
-            const ctx = document.getElementById('revenueLineChart');
-            if (charts.revenueLineChart) charts.revenueLineChart.destroy();
-
-            charts.revenueLineChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: months.map(m => m.replace('2025.', '').replace('月', '')),
-                    datasets: [{
-                        label: '月度營收',
-                        data: revenues,
-                        borderColor: '#3B82C4',
-                        backgroundColor: 'rgba(59, 130, 196, 0.1)',
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#3B82C4',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { callback: v => 'NT$ ' + (v / 1000000).toFixed(1) + 'M' }
-                        }
+        function calculateYTD(year) {
+            let total = 0;
+            for (let month of allMonths) {
+                if (month.startsWith(year)) {
+                    for (let channel in monthlyRevenue[month]) {
+                        total += monthlyRevenue[month][channel];
                     }
                 }
+            }
+            return total;
+        }
+
+        // Initialize dashboard
+        function initDashboard() {
+            populateMonthSelects();
+            initTabs();
+            updateAllDashboards();
+            initSubChannelTab();
+        }
+        let currentSubParent = '百貨/門市';
+        let currentSubName = '__ALL__';
+        function initSubChannelTab() {
+            const sel = document.getElementById('sub-channel-selector');
+            const nameSel = document.getElementById('sub-name-selector');
+            if (!sel || !nameSel) return;
+            sel.addEventListener('change', (e) => {
+                currentSubParent = e.target.value;
+                currentSubName = '__ALL__';
+                populateSubNameSelector();
+                renderSubChannel();
+            });
+            nameSel.addEventListener('change', (e) => {
+                currentSubName = e.target.value;
+                renderSubChannel();
+            });
+            populateSubNameSelector();
+            renderSubChannel();
+        }
+        function populateSubNameSelector() {
+            const nameSel = document.getElementById('sub-name-selector');
+            const data = subMonthly[currentSubParent] || {};
+            // Aggregate YTD 2026 to rank names
+            const ytd = {};
+            Object.keys(data).forEach(ym => {
+                if (ym.startsWith('2026')) {
+                    Object.entries(data[ym]).forEach(([raw, v]) => {
+                        ytd[raw] = (ytd[raw] || 0) + v;
+                    });
+                }
+            });
+            const sorted = Object.entries(ytd).sort((a,b) => b[1]-a[1]).map(([r]) => r);
+            nameSel.innerHTML = '<option value="__ALL__">全部</option>' +
+                sorted.map(r => `<option value="${r}">${r}</option>`).join('');
+            nameSel.value = currentSubName;
+        }
+        let subRankChart = null;
+        function renderSubChannel() {
+            const data = subMonthly[currentSubParent] || {};
+            // aggregate 2026 YTD per raw name
+            const ytd = {};
+            const months2026 = [];
+            Object.keys(data).sort().forEach(ym => {
+                if (ym.startsWith('2026')) {
+                    months2026.push(ym);
+                    Object.entries(data[ym]).forEach(([raw, v]) => {
+                        ytd[raw] = (ytd[raw] || 0) + v;
+                    });
+                }
+            });
+            const allSorted = Object.entries(ytd).sort((a,b) => b[1]-a[1]);
+            const isOne = currentSubName !== '__ALL__';
+            const sorted = isOne ? allSorted.filter(([r]) => r === currentSubName) : allSorted;
+            const totalYTD = sorted.reduce((s, [,v]) => s+v, 0);
+            const totalAll = allSorted.reduce((s, [,v]) => s+v, 0);
+
+            // KPI cards
+            const kpiGrid = document.getElementById('sub-kpi-grid');
+            kpiGrid.innerHTML = '';
+            if (isOne) {
+                const rank = allSorted.findIndex(([r]) => r === currentSubName) + 1;
+                const pct = totalAll > 0 ? ((totalYTD/totalAll)*100).toFixed(1) : '0.0';
+                const c1 = document.createElement('div');
+                c1.className = 'kpi-card';
+                c1.innerHTML = `<div class="kpi-label">${currentSubName} · 2026 YTD</div><div class="kpi-value">NT$${formatNumber(Math.round(totalYTD))}</div><div class="kpi-sub">於${currentSubParent}中排名 第 ${rank} 名</div>`;
+                kpiGrid.appendChild(c1);
+                const c2 = document.createElement('div');
+                c2.className = 'kpi-card';
+                c2.innerHTML = `<div class="kpi-label">佔 ${currentSubParent} 比例</div><div class="kpi-value">${pct}%</div><div class="kpi-sub">${currentSubParent}合計 NT$${formatNumber(Math.round(totalAll))}</div>`;
+                kpiGrid.appendChild(c2);
+                // monthly breakdown cards
+                months2026.forEach(m => {
+                    const v = (data[m] && data[m][currentSubName]) || 0;
+                    const card = document.createElement('div');
+                    card.className = 'kpi-card';
+                    card.innerHTML = `<div class="kpi-label">${m.split('-')[1]}月</div><div class="kpi-value" style="font-size:22px;">NT$${formatNumber(Math.round(v))}</div>`;
+                    kpiGrid.appendChild(card);
+                });
+            } else {
+                const totalCard = document.createElement('div');
+                totalCard.className = 'kpi-card';
+                totalCard.innerHTML = `<div class="kpi-label">${currentSubParent} 2026 YTD 合計</div><div class="kpi-value">NT$${formatNumber(Math.round(totalYTD))}</div><div class="kpi-sub">${sorted.length} 個點位／業績來源</div>`;
+                kpiGrid.appendChild(totalCard);
+                sorted.slice(0, 5).forEach(([raw, v]) => {
+                    const pct = totalYTD > 0 ? ((v/totalYTD)*100).toFixed(1) : '0.0';
+                    const card = document.createElement('div');
+                    card.className = 'kpi-card';
+                    card.innerHTML = `<div class="kpi-label">${raw}</div><div class="kpi-value" style="font-size:22px;">NT$${formatNumber(Math.round(v))}</div><div class="kpi-sub">佔比 ${pct}%</div>`;
+                    kpiGrid.appendChild(card);
+                });
+            }
+
+            // Bar chart
+            const ctx = document.getElementById('sub-rank-chart').getContext('2d');
+            if (subRankChart) subRankChart.destroy();
+            if (isOne) {
+                // show this one's monthly trend
+                subRankChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: months2026.map(m => m.split('-')[1] + '月'),
+                        datasets: [{
+                            label: `${currentSubName} 月別營收`,
+                            data: months2026.map(m => Math.round((data[m] && data[m][currentSubName]) || 0)),
+                            backgroundColor: '#3B82C4',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { ticks: { callback: v => 'NT$' + formatNumber(v) } } }
+                    }
+                });
+                document.getElementById('sub-chart-title').textContent = `${currentSubName} 2026 月別營收`;
+            } else {
+                subRankChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: sorted.map(([r]) => r),
+                        datasets: [{
+                            label: '2026 YTD 營收',
+                            data: sorted.map(([,v]) => Math.round(v)),
+                            backgroundColor: '#5CC8D7',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        plugins: { legend: { display: false } },
+                        scales: { x: { ticks: { callback: v => 'NT$' + formatNumber(v) } } }
+                    }
+                });
+                document.getElementById('sub-chart-title').textContent = `${currentSubParent} 2026 YTD 業績排行`;
+            }
+
+            // Monthly table
+            const thead = document.getElementById('sub-monthly-thead');
+            const tbody = document.getElementById('sub-monthly-tbody');
+            const headRow = ['<tr><th>名稱</th>'];
+            months2026.forEach(m => headRow.push(`<th>${m.split('-')[1]}月</th>`));
+            headRow.push('<th>合計</th></tr>');
+            thead.innerHTML = headRow.join('');
+
+            tbody.innerHTML = '';
+            sorted.forEach(([raw, total]) => {
+                const row = [`<tr><td><strong>${raw}</strong></td>`];
+                months2026.forEach(m => {
+                    const v = (data[m] && data[m][raw]) || 0;
+                    row.push(`<td>${v > 0 ? 'NT$' + formatNumber(Math.round(v)) : '-'}</td>`);
+                });
+                row.push(`<td style="font-weight:700;color:#5CC8D7;">NT$${formatNumber(Math.round(total))}</td></tr>`);
+                tbody.innerHTML += row.join('');
             });
         }
 
-        function renderRevenueBarChart() {
-            const channels = getChannels();
-            const months = ['2025.01月', '2025.02月', '2025.03月', '2025.04月', '2025.05月', '2025.06月', '2025.07月', '2025.08月', '2025.09月', '2025.10月'];
 
-            const datasets = channels.slice(0, 6).map(ch => ({
-                label: ch,
-                data: months.map(m => calculateChannelRevenue(m, ch)),
-                backgroundColor: channelColors[ch] || '#999'
+        function populateMonthSelects() {
+            const select = document.getElementById('month-select');
+            allMonths.forEach(month => {
+                const option = document.createElement('option');
+                option.value = month;
+                const [year, monthNum] = month.split('-');
+                option.textContent = `${year}年${monthNum}月`;
+                if (month === currentMonth) option.selected = true;
+                select.appendChild(option);
+            });
+            select.addEventListener('change', (e) => {
+                selectedMonth = e.target.value;
+                updateAllDashboards();
+            });
+
+            // Populate channel select
+            const channels = new Set();
+            allMonths.forEach(month => {
+                Object.keys(monthlyRevenue[month]).forEach(ch => channels.add(ch));
+            });
+            const channelSelect = document.getElementById('channel-select');
+            Array.from(channels).sort().forEach(channel => {
+                const option = document.createElement('option');
+                option.value = channel;
+                option.textContent = channel;
+                channelSelect.appendChild(option);
+            });
+            channelSelect.addEventListener('change', (e) => {
+                selectedChannel = e.target.value;
+                updateAllDashboards();
+            });
+        }
+
+        function initTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    btn.classList.add('active');
+                    const tabId = btn.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+
+                    // Trigger chart updates for newly visible charts
+                    setTimeout(() => {
+                        if (window.revenueChart) window.revenueChart.resize();
+                        if (window.channelStackedChart) window.channelStackedChart.resize();
+                        if (window.channelRankingChart) window.channelRankingChart.resize();
+                        if (window.channelShareChart) window.channelShareChart.resize();
+                        if (window.yoyChart) window.yoyChart.resize();
+                        if (window.unitsTrendChart) window.unitsTrendChart.resize();
+                        if (window.unitsChannelChart) window.unitsChannelChart.resize();
+                        if (window.targetTrajectoryChart) window.targetTrajectoryChart.resize();
+                        if (window.productRankingChart) window.productRankingChart.resize();
+                        if (window.monthly2026Chart) window.monthly2026Chart.resize();
+                        if (window.returnsRateChart) window.returnsRateChart.resize();
+                    }, 100);
+                });
+            });
+        }
+
+        function updateAllDashboards() {
+            updateTab1();
+            updateTab2();
+            updateTab3();
+            updateTab4();
+            updateTab5();
+            updateTab6();
+        }
+
+        function updateTab1() {
+            updateRevenueCards();
+            updateRevenueChart();
+            updateChannelStackedChart();
+        }
+
+        function updateRevenueCards() {
+            const data = monthlyRevenue[selectedMonth] || {};
+            let totalRevenue = 0;
+            const channelGrid = document.getElementById('revenue-grid');
+            channelGrid.innerHTML = '';
+
+            const displayData = selectedChannel === 'all' ? data : {[selectedChannel]: data[selectedChannel] || 0};
+
+            Object.entries(displayData).forEach(([channel, revenue]) => {
+                totalRevenue += revenue;
+                const card = document.createElement('div');
+                card.className = 'channel-card';
+                card.style.color = getChannelColor(channel);
+                const sparkline = generateSparkline(channel);
+                card.innerHTML = `
+                    <div class="channel-name">
+                        <span class="channel-dot"></span>
+                        ${channel}
+                    </div>
+                    <div class="channel-value">${formatCurrency(revenue)}</div>
+                    <div class="sparkline">
+                        <div class="sparkline-bars">${sparkline}</div>
+                    </div>
+                `;
+                channelGrid.appendChild(card);
+            });
+
+            document.getElementById('total-revenue').textContent = formatCurrency(totalRevenue);
+        }
+
+        function generateSparkline(channel) {
+            const last12Months = allMonths.slice(-12);
+            const values = last12Months.map(month => monthlyRevenue[month][channel] || 0);
+            const max = Math.max(...values, 1);
+            return values.map(val => `<div class="sparkline-bar" style="height: ${(val / max) * 100}%"></div>`).join('');
+        }
+
+        function updateRevenueChart() {
+            const ctx = document.getElementById('revenue-trend-chart');
+            const last12Months = allMonths.slice(-12);
+            const channels = new Set();
+            last12Months.forEach(m => Object.keys(monthlyRevenue[m]).forEach(c => channels.add(c)));
+
+            const datasets = Array.from(channels).sort().map(channel => ({
+                label: channel,
+                data: last12Months.map(m => monthlyRevenue[m][channel] || 0),
+                borderColor: getChannelColor(channel),
+                backgroundColor: getChannelColor(channel) + '33',
+                borderWidth: 2,
+                fill: false,
+                tension: 0.3
             }));
 
-            const ctx = document.getElementById('revenueBarChart');
-            if (charts.revenueBarChart) charts.revenueBarChart.destroy();
-
-            charts.revenueBarChart = new Chart(ctx, {
-                type: 'bar',
+            if (window.revenueChart) window.revenueChart.destroy();
+            window.revenueChart = new Chart(ctx, {
+                type: 'line',
                 data: {
-                    labels: months.map(m => m.replace('2025.', '').replace('月', '')),
+                    labels: last12Months.map(m => m.slice(5)),
                     datasets: datasets
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            stacked: false,
-                            ticks: { callback: v => 'NT$ ' + (v / 1000000).toFixed(1) + 'M' }
-                        }
-                    }
+                    plugins: {legend: {position: 'top'}},
+                    scales: {y: {beginAtZero: true}}
                 }
             });
         }
 
-        function updateChannelAnalysis() {
-            renderChannelRankChart();
-            renderChannelPieChart();
-            renderChannelRadarChart();
-            updateChannelTable();
-        }
+        function updateChannelStackedChart() {
+            const ctx = document.getElementById('channel-stacked-chart');
+            const last6Months = allMonths.slice(-6);
+            const channels = new Set();
+            last6Months.forEach(m => Object.keys(monthlyRevenue[m]).forEach(c => channels.add(c)));
 
-        function renderChannelRankChart() {
-            const channels = getChannels();
-            const revenues = channels.map(ch => calculateChannelRevenue(selectedMonth, ch));
-            const sorted = channels.map((ch, i) => ({ channel: ch, revenue: revenues[i] }))
-                .sort((a, b) => b.revenue - a.revenue);
+            const datasets = Array.from(channels).sort().map(channel => ({
+                label: channel,
+                data: last6Months.map(m => monthlyRevenue[m][channel] || 0),
+                backgroundColor: getChannelColor(channel)
+            }));
 
-            const ctx = document.getElementById('channelRankChart');
-            if (charts.channelRankChart) charts.channelRankChart.destroy();
-
-            charts.channelRankChart = new Chart(ctx, {
+            if (window.channelStackedChart) window.channelStackedChart.destroy();
+            window.channelStackedChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: sorted.map(d => d.channel),
-                    datasets: [{
-                        label: '營收',
-                        data: sorted.map(d => d.revenue),
-                        backgroundColor: sorted.map(d => channelColors[d.channel] || '#999')
-                    }]
+                    labels: last6Months.map(m => m.slice(5)),
+                    datasets: datasets
                 },
                 options: {
                     indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: {
-                            ticks: { callback: v => formatCurrency(v) }
-                        }
-                    }
+                    scales: {x: {stacked: true}, y: {stacked: true}},
+                    plugins: {legend: {position: 'bottom'}}
                 }
             });
         }
 
-        function renderChannelPieChart() {
-            const channels = getChannels();
-            const revenues = channels.map(ch => calculateChannelRevenue(selectedMonth, ch))
-                .filter(r => r > 0);
-            const nonZeroChannels = channels.filter((ch, i) => channels.map(c => calculateChannelRevenue(selectedMonth, c))[i] > 0);
+        function updateTab2() {
+            updateTargetRing();
+            updateTargetCards();
+            updateTargetTrajectoryChart();
+        }
 
-            const ctx = document.getElementById('channelPieChart');
-            if (charts.channelPieChart) charts.channelPieChart.destroy();
+        function updateTargetRing() {
+            const ytdRevenue = calculateYTD('2026');
+            const percentage = Math.min(Math.round((ytdRevenue / totalTarget) * 100), 100);
+            const angle = (percentage / 100) * 360;
 
-            charts.channelPieChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: nonZeroChannels,
-                    datasets: [{
-                        data: revenues,
-                        backgroundColor: nonZeroChannels.map(ch => channelColors[ch] || '#999')
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => {
-                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    const pct = ((context.parsed / total) * 100).toFixed(1);
-                                    return context.label + ': ' + pct + '%';
-                                }
-                            }
-                        }
-                    }
-                }
+            let bgColor = '#EF4444';
+            if (percentage >= 80) bgColor = '#10B981';
+            else if (percentage >= 50) bgColor = '#F59E0B';
+
+            const ring = document.getElementById('progress-ring');
+            ring.style.background = `conic-gradient(${bgColor} 0deg, ${bgColor} ${angle}deg, #E5E7EB ${angle}deg, #E5E7EB 360deg)`;
+            document.getElementById('progress-percent').textContent = `${percentage}%`;
+        }
+
+        function updateTargetCards() {
+            const ytd2026 = {};
+            Object.keys(monthlyRevenue).filter(m => m.startsWith('2026')).forEach(month => {
+                Object.entries(monthlyRevenue[month]).forEach(([channel, revenue]) => {
+                    ytd2026[channel] = (ytd2026[channel] || 0) + revenue;
+                });
+            });
+
+            const grid = document.getElementById('target-cards-grid');
+            grid.innerHTML = '';
+
+            Object.entries(annualTargets).forEach(([group, info]) => {
+                let actualRevenue = 0;
+                info.channels.forEach(ch => {
+                    actualRevenue += ytd2026[ch] || 0;
+                });
+                const percentage = Math.round((actualRevenue / info.target) * 100);
+
+                const card = document.createElement('div');
+                card.className = 'target-progress-card';
+                card.innerHTML = `
+                    <div class="target-card-title">${group}</div>
+                    <div class="target-card-title" style="font-size: 0.9rem; color: #999; font-weight: 400;">目標 ${formatCurrency(info.target)}</div>
+                    <div class="target-progress-bar">
+                        <div class="target-progress-fill" style="width: ${Math.min(percentage, 100)}%"></div>
+                    </div>
+                    <div class="target-progress-label">
+                        <span>${formatCurrency(actualRevenue)}</span>
+                        <span>${percentage}%</span>
+                    </div>
+                `;
+                grid.appendChild(card);
             });
         }
 
-        function renderChannelRadarChart() {
-            const channels = getChannels().filter(ch => calculateChannelRevenue(selectedMonth, ch) > 0).slice(0, 8);
-            const metrics = ['Revenue (M)', 'Units (K)', 'Returns (%)'];
+        function updateTargetTrajectoryChart() {
+            const ctx = document.getElementById('target-trajectory-chart');
+            const months2026 = allMonths.filter(m => m.startsWith('2026'));
 
-            const revenueNorm = channels.map(ch => calculateChannelRevenue(selectedMonth, ch) / 1000000);
-            const unitsNorm = channels.map(ch => {
-                const data = getChannelData(selectedMonth, ch);
-                const total = data.reduce((s, d) => s + d.w1Units + d.w2Units + d.w3Units + d.w4Units, 0);
-                return total / 10;
-            });
-            const returnsNorm = channels.map(ch => {
-                const data = getChannelData(selectedMonth, ch);
-                const totalReturns = data.reduce((s, d) => s + d.w1Returns + d.w2Returns + d.w3Returns + d.w4Returns, 0);
-                const totalUnits = data.reduce((s, d) => s + d.w1Units + d.w2Units + d.w3Units + d.w4Units, 0);
-                return totalUnits > 0 ? (totalReturns / totalUnits) * 100 : 0;
+            let cumulativeActual = [];
+            let cumSum = 0;
+            months2026.forEach(month => {
+                let monthTotal = 0;
+                Object.values(monthlyRevenue[month]).forEach(v => monthTotal += v);
+                cumSum += monthTotal;
+                cumulativeActual.push(cumSum);
             });
 
-            const ctx = document.getElementById('channelRadarChart');
-            if (charts.channelRadarChart) charts.channelRadarChart.destroy();
+            const trajectoryTarget = [];
+            for (let i = 0; i < months2026.length; i++) {
+                trajectoryTarget.push((totalTarget / 12) * (i + 1));
+            }
 
-            charts.channelRadarChart = new Chart(ctx, {
-                type: 'radar',
+            if (window.targetTrajectoryChart) window.targetTrajectoryChart.destroy();
+            window.targetTrajectoryChart = new Chart(ctx, {
+                type: 'line',
                 data: {
-                    labels: channels,
+                    labels: months2026.map(m => m.slice(5)),
                     datasets: [
                         {
-                            label: 'Revenue (M NT$)',
-                            data: revenueNorm,
-                            borderColor: '#3B82C4',
-                            backgroundColor: 'rgba(59, 130, 196, 0.2)'
+                            label: '實際累計',
+                            data: cumulativeActual,
+                            borderColor: '#5CC8D7',
+                            backgroundColor: 'rgba(92, 200, 215, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3
                         },
                         {
-                            label: 'Units (K)',
-                            data: unitsNorm,
-                            borderColor: '#5BB5A2',
-                            backgroundColor: 'rgba(91, 181, 162, 0.2)'
-                        },
-                        {
-                            label: 'Return Rate (%)',
-                            data: returnsNorm,
-                            borderColor: '#E8746A',
-                            backgroundColor: 'rgba(232, 116, 106, 0.2)'
+                            label: '目標軌跡',
+                            data: trajectoryTarget,
+                            borderColor: '#999',
+                            borderDash: [5, 5],
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.3
                         }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            beginAtZero: true
-                        }
-                    }
+                    plugins: {legend: {position: 'top'}},
+                    scales: {y: {beginAtZero: true}}
                 }
             });
         }
 
-        function updateChannelTable() {
-            const monthData = getChannelData(selectedMonth, selectedChannel);
-            document.getElementById('th-month').textContent = selectedMonth;
-
-            let html = '';
-            getChannels().forEach(ch => {
-                const chData = monthData.find(d => d.channel === ch);
-                const revenue = chData ? (chData.w1Revenue + chData.w2Revenue + chData.w3Revenue + chData.w4Revenue) : 0;
-                const bgColor = getHeatmapColor(revenue, 0, calculateMonthlyRevenue(selectedMonth));
-
-                html += `
-                    <tr>
-                        <td style="font-weight: 600;">${ch}</td>
-                        <td style="background: ${bgColor}; font-weight: 600;">${formatCurrency(revenue)}</td>
-                    </tr>
-                `;
-            });
-
-            document.getElementById('channelTableBody').innerHTML = html;
+        function updateTab3() {
+            updateChannelRankingChart();
+            updateChannelShareChart();
+            updateChannelHeatmapTable();
+            updateYoYChart();
         }
 
-        function getHeatmapColor(value, min, max) {
-            if (max === 0) return '#fff';
-            const ratio = (value - min) / (max - min);
-            if (ratio < 0.33) return '#FEE2E2';
-            if (ratio < 0.67) return '#FCD34D';
-            return '#BBFBEE';
-        }
+        function updateChannelRankingChart() {
+            const ctx = document.getElementById('channel-ranking-chart');
+            const data = monthlyRevenue[selectedMonth] || {};
+            const sorted = Object.entries(data).sort((a, b) => b[1] - a[1]);
 
-        function updateWeeklyTrends() {
-            renderWeeklyStackedChart();
-            renderWeeklyPatternChart();
-            updateWeeklyDetailTable();
-            updateHeatmap();
-        }
-
-        function renderWeeklyStackedChart() {
-            const months = ['2025.01月', '2025.02月', '2025.03月', '2025.04月', '2025.05月', '2025.06月', '2025.07月', '2025.08月', '2025.09月', '2025.10月'];
-            const channels = getChannels().filter(ch => calculateChannelRevenue(selectedMonth, ch) > 0).slice(0, 4);
-
-            const datasets = channels.map(ch => {
-                const weeklyData = months.map(m => {
-                    const data = getChannelData(m, ch);
-                    return data.reduce((s, d) => s + d.w1Revenue, 0);
-                });
-                return {
-                    label: ch + ' W1',
-                    data: weeklyData,
-                    backgroundColor: channelColors[ch] || '#999',
-                    stack: 'stack1'
-                };
-            });
-
-            const ctx = document.getElementById('weeklyStackedChart');
-            if (charts.weeklyStackedChart) charts.weeklyStackedChart.destroy();
-
-            charts.weeklyStackedChart = new Chart(ctx, {
+            if (window.channelRankingChart) window.channelRankingChart.destroy();
+            window.channelRankingChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: months.map(m => m.replace('2025.', '').replace('月', '')),
-                    datasets: datasets
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            stacked: true,
-                            ticks: { callback: v => 'NT$ ' + (v / 1000000).toFixed(1) + 'M' }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderWeeklyPatternChart() {
-            const months = ['2025.10月', '2025.09月', '2025.08月', '2025.07月'];
-            const weeks = ['W1', 'W2', 'W3', 'W4'];
-
-            const datasets = months.map(m => {
-                const monthData = getMonthData(m);
-                const weeklyRevenue = weeks.map(w => {
-                    const weekKey = w.toLowerCase() + 'Revenue';
-                    return monthData.reduce((s, d) => s + d[weekKey], 0);
-                });
-                return {
-                    label: m.replace('2025.', '').replace('月', ''),
-                    data: weeklyRevenue,
-                    borderColor: channelColors[Object.keys(channelColors)[months.indexOf(m) % 10]],
-                    backgroundColor: 'transparent',
-                    borderWidth: 2,
-                    tension: 0.4
-                };
-            });
-
-            const ctx = document.getElementById('weeklyPatternChart');
-            if (charts.weeklyPatternChart) charts.weeklyPatternChart.destroy();
-
-            charts.weeklyPatternChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: weeks,
-                    datasets: datasets
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom' } },
-                    scales: {
-                        y: {
-                            ticks: { callback: v => 'NT$ ' + (v / 1000000).toFixed(1) + 'M' }
-                        }
-                    }
-                }
-            });
-        }
-
-        function selectWeeklyMonth(month) {
-            selectedWeeklyMonth = month;
-            document.querySelectorAll('.week-button').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById('weeklyTableTitle').textContent = month + ' - 各通路週度營收';
-            updateWeeklyDetailTable();
-        }
-
-        function updateWeeklyDetailTable() {
-            const monthData = getMonthData(selectedWeeklyMonth);
-            const channels = getChannels();
-
-            let html = '';
-            channels.forEach(ch => {
-                const data = monthData.find(d => d.channel === ch);
-                if (!data) return;
-
-                const w1 = data.w1Revenue;
-                const w2 = data.w2Revenue;
-                const w3 = data.w3Revenue;
-                const w4 = data.w4Revenue;
-                const total = w1 + w2 + w3 + w4;
-
-                html += `
-                    <tr>
-                        <td style="font-weight: 600;">${ch}</td>
-                        <td>${formatCurrency(w1)}</td>
-                        <td>${formatCurrency(w2)}</td>
-                        <td>${formatCurrency(w3)}</td>
-                        <td>${formatCurrency(w4)}</td>
-                        <td style="font-weight: 700; background: rgba(59, 130, 196, 0.1);">${formatCurrency(total)}</td>
-                    </tr>
-                `;
-            });
-
-            document.getElementById('weeklyDetailBody').innerHTML = html;
-        }
-
-        function updateHeatmap() {
-            const channels = getChannels();
-            const monthData = getMonthData(selectedWeeklyMonth);
-
-            const allRevenues = [];
-            channels.forEach(ch => {
-                const data = monthData.find(d => d.channel === ch);
-                if (data) {
-                    allRevenues.push(data.w1Revenue, data.w2Revenue, data.w3Revenue, data.w4Revenue);
-                }
-            });
-
-            const maxRev = Math.max(...allRevenues);
-
-            let html = '';
-            channels.forEach(ch => {
-                const data = monthData.find(d => d.channel === ch);
-                if (!data) return;
-
-                const w1bg = getHeatmapColor(data.w1Revenue, 0, maxRev);
-                const w2bg = getHeatmapColor(data.w2Revenue, 0, maxRev);
-                const w3bg = getHeatmapColor(data.w3Revenue, 0, maxRev);
-                const w4bg = getHeatmapColor(data.w4Revenue, 0, maxRev);
-
-                html += `
-                    <tr>
-                        <td style="font-weight: 600;">${ch}</td>
-                        <td style="background: ${w1bg};">${formatCurrency(data.w1Revenue)}</td>
-                        <td style="background: ${w2bg};">${formatCurrency(data.w2Revenue)}</td>
-                        <td style="background: ${w3bg};">${formatCurrency(data.w3Revenue)}</td>
-                        <td style="background: ${w4bg};">${formatCurrency(data.w4Revenue)}</td>
-                    </tr>
-                `;
-            });
-
-            document.getElementById('heatmapBody').innerHTML = html;
-        }
-
-        function updateReturnsAnalysis() {
-            const monthData = getMonthData(selectedMonth);
-            const channels = getChannels();
-
-            let totalReturns = 0;
-            let totalUnits = 0;
-            let channelReturns = {};
-
-            channels.forEach(ch => {
-                const data = monthData.find(d => d.channel === ch);
-                if (data) {
-                    const returns = data.w1Returns + data.w2Returns + data.w3Returns + data.w4Returns;
-                    const units = data.w1Units + data.w2Units + data.w3Units + data.w4Units;
-                    totalReturns += returns;
-                    totalUnits += units;
-                    channelReturns[ch] = { returns, units };
-                }
-            });
-
-            const returnRate = totalUnits > 0 ? (totalReturns / totalUnits) * 100 : 0;
-
-            const worstChannel = Object.entries(channelReturns)
-                .reduce((max, [ch, data]) => {
-                    const rate = data.units > 0 ? (data.returns / data.units) * 100 : 0;
-                    return rate > (max.rate || 0) ? { channel: ch, rate } : max;
-                }, {});
-
-            document.getElementById('totalReturnsKpi').textContent = totalReturns.toLocaleString('zh-TW');
-            document.getElementById('returnRateKpi').textContent = returnRate.toFixed(2) + '%';
-            document.getElementById('worstChannelKpi').textContent = worstChannel.channel || '--';
-            document.getElementById('worstChannelPercent').textContent = (worstChannel.rate?.toFixed(2) ?? '--') + '%';
-
-            renderReturnRateChart(channelReturns);
-            renderReturnsTrendChart();
-            renderReturnScatterChart(channelReturns);
-            updateReturnsTable();
-        }
-
-        function renderReturnRateChart(channelReturns) {
-            const channels = Object.keys(channelReturns).sort((a, b) => {
-                const rateA = channelReturns[a].units > 0 ? (channelReturns[a].returns / channelReturns[a].units) * 100 : 0;
-                const rateB = channelReturns[b].units > 0 ? (channelReturns[b].returns / channelReturns[b].units) * 100 : 0;
-                return rateB - rateA;
-            });
-
-            const rates = channels.map(ch => {
-                const data = channelReturns[ch];
-                return data.units > 0 ? (data.returns / data.units) * 100 : 0;
-            });
-
-            const ctx = document.getElementById('returnRateChart');
-            if (charts.returnRateChart) charts.returnRateChart.destroy();
-
-            charts.returnRateChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: channels,
+                    labels: sorted.map(e => e[0]),
                     datasets: [{
-                        label: '退貨率 (%)',
-                        data: rates,
-                        backgroundColor: rates.map(r => r > 5 ? '#EF4444' : r > 2 ? '#FBBF24' : '#10B981')
+                        label: '營收',
+                        data: sorted.map(e => e[1]),
+                        backgroundColor: sorted.map(e => getChannelColor(e[0]))
                     }]
                 },
                 options: {
                     indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } }
+                    plugins: {legend: {display: false}}
                 }
             });
         }
 
-        function renderReturnsTrendChart() {
-            const months = ['2025.01月', '2025.02月', '2025.03月', '2025.04月', '2025.05月', '2025.06月', '2025.07月', '2025.08月', '2025.09月', '2025.10月'];
-            const returns = months.map(m => {
-                return getMonthData(m).reduce((s, d) => s + d.w1Returns + d.w2Returns + d.w3Returns + d.w4Returns, 0);
-            });
+        function updateChannelShareChart() {
+            const ctx = document.getElementById('channel-share-chart');
+            const data = monthlyRevenue[selectedMonth] || {};
+            const sorted = Object.entries(data).sort((a, b) => b[1] - a[1]);
 
-            const ctx = document.getElementById('returnsTrendChart');
-            if (charts.returnsTrendChart) charts.returnsTrendChart.destroy();
-
-            charts.returnsTrendChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: months.map(m => m.replace('2025.', '').replace('月', '')),
-                    datasets: [{
-                        label: '月度退貨',
-                        data: returns,
-                        borderColor: '#E8746A',
-                        backgroundColor: 'rgba(232, 116, 106, 0.1)',
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#E8746A'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } }
-                }
-            });
-        }
-
-        function renderReturnScatterChart(channelReturns) {
-            const channels = Object.keys(channelReturns);
-            const points = channels.map(ch => {
-                const revenue = calculateChannelRevenue(selectedMonth, ch);
-                const rate = channelReturns[ch].units > 0 ? (channelReturns[ch].returns / channelReturns[ch].units) * 100 : 0;
-                return { x: revenue, y: rate, label: ch };
-            }).filter(p => p.x > 0);
-
-            const ctx = document.getElementById('returnScatterChart');
-            if (charts.returnScatterChart) charts.returnScatterChart.destroy();
-
-            charts.returnScatterChart = new Chart(ctx, {
-                type: 'scatter',
-                data: {
-                    datasets: points.map(p => ({
-                        label: p.label,
-                        data: [p],
-                        backgroundColor: channelColors[p.label] || '#999'
-                    }))
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: {
-                            title: { display: true, text: 'Revenue (NT$)' },
-                            ticks: { callback: v => 'NT$ ' + (v / 1000000).toFixed(1) + 'M' }
-                        },
-                        y: {
-                            title: { display: true, text: 'Return Rate (%)' }
-                        }
-                    }
-                }
-            });
-        }
-
-        function updateReturnsTable() {
-            const months = ['2025.01月', '2025.02月', '2025.03月', '2025.04月', '2025.05月', '2025.06月', '2025.07月', '2025.08月', '2025.09月', '2025.10月'];
-
-            let html = '';
-            months.forEach(m => {
-                const data = getMonthData(m);
-                const totalReturns = data.reduce((s, d) => s + d.w1Returns + d.w2Returns + d.w3Returns + d.w4Returns, 0);
-                const totalUnits = data.reduce((s, d) => s + d.w1Units + d.w2Units + d.w3Units + d.w4Units, 0);
-                const rate = totalUnits > 0 ? ((totalReturns / totalUnits) * 100).toFixed(2) : '0.00';
-
-                html += `
-                    <tr>
-                        <td style="font-weight: 600;">${m}</td>
-                        <td>${totalUnits.toLocaleString('zh-TW')}</td>
-                        <td>${totalReturns.toLocaleString('zh-TW')}</td>
-                        <td>${rate}%</td>
-                    </tr>
-                `;
-            });
-
-            document.getElementById('returnsTableBody').innerHTML = html;
-        }
-
-        function initApril2026Tab() {
-            let html = '';
-            april2026Data.channels.forEach(ch => {
-                html += `
-                    <div class="breakdown-card">
-                        <div class="breakdown-label">${ch.name}</div>
-                        <div class="breakdown-value">${formatCurrency(ch.revenue)}</div>
-                        <div class="breakdown-change">${ch.share}% of total</div>
-                    </div>
-                `;
-            });
-
-            document.getElementById('april2026CardsContainer').innerHTML = html;
-
-            document.getElementById('april2026ActualRevenue').textContent = formatCurrency(april2026Data.total);
-            document.getElementById('april2026ProjectedRevenue').textContent = formatCurrency(april2026Data.projectedMonthly);
-
-            document.getElementById('monthProgressBar').style.width = `${(april2026Data.daysElapsed / april2026Data.daysInMonth) * 100}%`;
-            document.getElementById('monthProgressBar').textContent = `${april2026Data.daysElapsed}/${april2026Data.daysInMonth} days - ${Math.round((april2026Data.daysElapsed / april2026Data.daysInMonth) * 100)}%`;
-
-            document.getElementById('april2026CogsRatio').textContent = (april2026Data.cogsRatio * 100).toFixed(1) + '%';
-            document.getElementById('april2026GrossMargin').textContent = (april2026Data.grossMargin * 100).toFixed(1) + '%';
-
-            renderApril2026WeeklyChart();
-            renderApril2026ChannelChart();
-        }
-
-        function renderApril2026WeeklyChart() {
-            const ctx = document.getElementById('april2026WeeklyChart');
-            if (charts.april2026WeeklyChart) charts.april2026WeeklyChart.destroy();
-
-            charts.april2026WeeklyChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['W1 (Apr 1-7)', 'W2 (Apr 8-10)'],
-                    datasets: [{
-                        label: '營收',
-                        data: [april2026Data.w1Total, april2026Data.w2Total],
-                        backgroundColor: ['#3B82C4', '#5BB5A2']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: {
-                            ticks: { callback: v => 'NT$ ' + (v / 1000000).toFixed(1) + 'M' }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderApril2026ChannelChart() {
-            const ctx = document.getElementById('april2026ChannelChart');
-            if (charts.april2026ChannelChart) charts.april2026ChannelChart.destroy();
-
-            const nonZeroChannels = april2026Data.channels.filter(c => c.revenue > 0);
-
-            charts.april2026ChannelChart = new Chart(ctx, {
+            if (window.channelShareChart) window.channelShareChart.destroy();
+            window.channelShareChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: nonZeroChannels.map(c => c.name),
+                    labels: sorted.map(e => e[0]),
                     datasets: [{
-                        data: nonZeroChannels.map(c => c.revenue),
-                        backgroundColor: nonZeroChannels.map(c => channelColors[c.name] || '#999')
+                        data: sorted.map(e => e[1]),
+                        backgroundColor: sorted.map(e => getChannelColor(e[0]))
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => {
-                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    const pct = ((context.parsed / total) * 100).toFixed(1);
-                                    return context.label + ': ' + pct + '%';
-                                }
-                            }
-                        }
-                    }
+                    plugins: {legend: {position: 'bottom'}}
                 }
             });
         }
 
-        document.getElementById('monthSelect').addEventListener('change', (e) => {
-            selectedMonth = e.target.value;
-            updateTabsData();
-        });
+        function updateChannelHeatmapTable() {
+            const table = document.getElementById('channel-heatmap-table');
+            const channels = new Set();
+            const months = allMonths.slice(-12);
+            months.forEach(m => Object.keys(monthlyRevenue[m]).forEach(c => channels.add(c)));
 
-        document.getElementById('channelSelect').addEventListener('change', (e) => {
-            selectedChannel = e.target.value;
-            updateTabsData();
-        });
+            let html = '<thead><tr><th>通路</th>';
+            months.forEach(m => {
+                html += `<th>${m.slice(5)}</th>`;
+            });
+            html += '</tr></thead><tbody>';
 
-        updateRevenueOverview();
-        initApril2026Tab();
+            Array.from(channels).sort().forEach(channel => {
+                html += `<tr><td><strong>${channel}</strong></td>`;
+                months.forEach(month => {
+                    const value = monthlyRevenue[month][channel] || 0;
+                    const color = value > 0 ? '#5CC8D7' : '#E0E0E0';
+                    html += `<td style="background-color: ${color}33; text-align: center;">${Math.round(value / 100000)}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</tbody>';
+            table.innerHTML = html;
+        }
+
+        function updateYoYChart() {
+            const ctx = document.getElementById('yoy-chart');
+            const months2024 = allMonths.filter(m => m.startsWith('2024')).slice(0, 10);
+            const months2025 = allMonths.filter(m => m.startsWith('2025')).slice(0, 10);
+
+            const data2024 = months2024.map(m => Object.values(monthlyRevenue[m]).reduce((a, b) => a + b, 0));
+            const data2025 = months2025.map(m => Object.values(monthlyRevenue[m]).reduce((a, b) => a + b, 0));
+
+            if (window.yoyChart) window.yoyChart.destroy();
+            window.yoyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月'],
+                    datasets: [
+                        {label: '2024年', data: data2024, backgroundColor: '#D1D5DB'},
+                        {label: '2025年', data: data2025, backgroundColor: '#5CC8D7'}
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {y: {beginAtZero: true}},
+                    plugins: {legend: {position: 'top'}}
+                }
+            });
+        }
+
+        function updateTab4() {
+            updateUnitsKPI();
+            updateUnitsTrendChart();
+            updateUnitsChannelChart();
+            updateUnitsTable();
+        }
+
+        function updateUnitsKPI() {
+            const data = monthlyUnits[selectedMonth] || {};
+            const grid = document.getElementById('units-kpi-grid');
+            grid.innerHTML = '';
+
+            const displayData = selectedChannel === 'all' ? data : {[selectedChannel]: data[selectedChannel] || 0};
+            Object.entries(displayData).forEach(([channel, units]) => {
+                const card = document.createElement('div');
+                card.className = 'kpi-card';
+                card.innerHTML = `
+                    <div class="kpi-label">${channel}</div>
+                    <div class="kpi-value">${Math.round(units).toLocaleString('zh-TW')}</div>
+                    <div class="card-subtitle">件</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function updateUnitsTrendChart() {
+            const ctx = document.getElementById('units-trend-chart');
+            const last12Months = allMonths.slice(-12);
+            const channels = new Set();
+            last12Months.forEach(m => Object.keys(monthlyUnits[m]).forEach(c => channels.add(c)));
+
+            const datasets = Array.from(channels).sort().map(channel => ({
+                label: channel,
+                data: last12Months.map(m => monthlyUnits[m][channel] || 0),
+                borderColor: getChannelColor(channel),
+                borderWidth: 2,
+                fill: false,
+                tension: 0.3
+            }));
+
+            if (window.unitsTrendChart) window.unitsTrendChart.destroy();
+            window.unitsTrendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: last12Months.map(m => m.slice(5)),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {legend: {position: 'top'}},
+                    scales: {y: {beginAtZero: true}}
+                }
+            });
+        }
+
+        function updateUnitsChannelChart() {
+            const ctx = document.getElementById('units-channel-chart');
+            const data = monthlyUnits[selectedMonth] || {};
+            const sorted = Object.entries(data).sort((a, b) => b[1] - a[1]);
+
+            if (window.unitsChannelChart) window.unitsChannelChart.destroy();
+            window.unitsChannelChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: sorted.map(e => e[0]),
+                    datasets: [{
+                        data: sorted.map(e => e[1]),
+                        backgroundColor: sorted.map(e => getChannelColor(e[0]))
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {legend: {position: 'bottom'}}
+                }
+            });
+        }
+
+        function updateUnitsTable() {
+            const table = document.getElementById('units-table');
+            let html = '<tbody>';
+            allMonths.forEach(month => {
+                const total = Object.values(monthlyUnits[month]).reduce((a, b) => a + b, 0);
+                html += `<tr><td>${month}</td><td>${Math.round(total).toLocaleString('zh-TW')}</td></tr>`;
+            });
+            html += '</tbody>';
+            table.innerHTML = '<thead><tr><th>月份</th><th>總件數</th></tr></thead>' + html;
+        }
+
+        function updateTab5() {
+            updateProductRankingChart();
+            updateProductRankingTable();
+        }
+
+        function updateProductRankingChart() {
+            const ctx = document.getElementById('product-ranking-chart');
+
+            if (window.productRankingChart) window.productRankingChart.destroy();
+            window.productRankingChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: topProducts.map(p => p.name),
+                    datasets: [{
+                        label: '營收',
+                        data: topProducts.map(p => p.revenue),
+                        backgroundColor: 'rgba(92, 200, 215, 0.8)'
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {legend: {display: false}}
+                }
+            });
+        }
+
+        function updateProductRankingTable() {
+            const table = document.getElementById('product-ranking-table');
+            let html = '<tbody>';
+            topProducts.forEach((product, index) => {
+                const unitPrice = Math.round(product.revenue / product.quantity);
+                html += `<tr><td>${index + 1}</td><td>${product.name}</td><td>${formatCurrency(product.revenue)}</td><td>${Math.round(product.quantity).toLocaleString('zh-TW')}</td><td>${formatCurrency(unitPrice)}</td></tr>`;
+            });
+            html += '</tbody>';
+            table.innerHTML = '<thead><tr><th>排名</th><th>商品名稱</th><th>營收 (NT$)</th><th>銷售件數</th><th>件均價</th></tr></thead>' + html;
+        }
+
+        function updateTab6() {
+            updateMonthlyKPI();
+            updateMonthly2026Chart();
+            updateMonthlyChannelTable();
+            updateReturnsKPI();
+            updateReturnsRateChart();
+        }
+
+        function updateMonthlyKPI() {
+            const grid = document.getElementById('monthly-kpi-grid');
+            grid.innerHTML = '';
+            const months2026 = allMonths.filter(m => m.startsWith('2026'));
+
+            months2026.forEach(month => {
+                const total = Object.values(monthlyRevenue[month]).reduce((a, b) => a + b, 0);
+                const card = document.createElement('div');
+                card.className = 'kpi-card';
+                const [, monthNum] = month.split('-');
+                card.innerHTML = `
+                    <div class="kpi-label">${monthNum}月營收</div>
+                    <div class="kpi-value">${formatCurrency(total)}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function updateMonthly2026Chart() {
+            const ctx = document.getElementById('monthly-2026-chart');
+            const months2026 = allMonths.filter(m => m.startsWith('2026'));
+            const revenues = months2026.map(m => Object.values(monthlyRevenue[m]).reduce((a, b) => a + b, 0));
+
+            if (window.monthly2026Chart) window.monthly2026Chart.destroy();
+            window.monthly2026Chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months2026.map(m => m.slice(5)),
+                    datasets: [{
+                        label: '月營收',
+                        data: revenues,
+                        backgroundColor: '#5CC8D7'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {legend: {display: false}}
+                }
+            });
+        }
+
+        function updateMonthlyChannelTable() {
+            const table = document.getElementById('monthly-channel-table');
+            let html = '<tbody>';
+            const months2026 = allMonths.filter(m => m.startsWith('2026'));
+
+            months2026.forEach(month => {
+                const monthData = monthlyRevenue[month];
+                const total = Object.values(monthData).reduce((a, b) => a + b, 0);
+                const channelCount = Object.keys(monthData).length;
+                html += `<tr><td>${month}</td><td>${formatCurrency(total)}</td><td>${channelCount}</td></tr>`;
+            });
+            html += '</tbody>';
+            table.innerHTML = '<thead><tr><th>月份</th><th>總營收 (NT$)</th><th>通路數</th></tr></thead>' + html;
+        }
+
+        function updateReturnsKPI() {
+            const grid = document.getElementById('returns-kpi-grid');
+            grid.innerHTML = '';
+
+            const months2026 = allMonths.filter(m => m.startsWith('2026'));
+            let totalReturns = 0;
+            let totalSales = 0;
+
+            months2026.forEach(month => {
+                if (monthlyReturns[month]) {
+                    totalReturns += monthlyReturns[month].returns_count;
+                    totalSales += monthlyReturns[month].sales_count;
+                }
+            });
+
+            const returnRate = totalSales > 0 ? ((totalReturns / totalSales) * 100).toFixed(2) : 0;
+
+            const card1 = document.createElement('div');
+            card1.className = 'kpi-card';
+            card1.innerHTML = `
+                <div class="kpi-label">2026年度累計退貨</div>
+                <div class="kpi-value">${totalReturns}</div>
+                <div class="card-subtitle">筆</div>
+            `;
+            grid.appendChild(card1);
+
+            const card2 = document.createElement('div');
+            card2.className = 'kpi-card';
+            card2.innerHTML = `
+                <div class="kpi-label">平均月退貨率</div>
+                <div class="kpi-value">${returnRate}%</div>
+                <div class="card-subtitle">(${totalReturns}/${totalSales})</div>
+            `;
+            grid.appendChild(card2);
+        }
+
+        function updateReturnsRateChart() {
+            const ctx = document.getElementById('returns-rate-chart');
+            const months2026 = allMonths.filter(m => m.startsWith('2026'));
+            const data = months2026.map(month => {
+                if (monthlyReturns[month]) {
+                    const rate = (monthlyReturns[month].returns_count / monthlyReturns[month].sales_count) * 100;
+                    return rate.toFixed(2);
+                }
+                return 0;
+            });
+
+            if (window.returnsRateChart) window.returnsRateChart.destroy();
+            window.returnsRateChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months2026.map(m => m.slice(5)),
+                    datasets: [{
+                        label: '退貨率',
+                        data: data,
+                        backgroundColor: '#E8746A'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {legend: {display: false}},
+                    scales: {y: {beginAtZero: true, ticks: {callback: function(value) { return value + '%'; }}}}
+                }
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initDashboard);
     </script>
 </body>
 </html>
