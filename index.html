@@ -1146,6 +1146,10 @@
             return 'NT$ ' + Math.round(value).toLocaleString('zh-TW');
         }
 
+        function formatNumber(value) {
+            return Math.round(value).toLocaleString('zh-TW');
+        }
+
         function getChannelColor(channel) {
             const colors = {
                 '官網': '#3B82C4', '蝦皮': '#F0985A', '阿清': '#6B8FCC',
