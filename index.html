@@ -1006,8 +1006,10 @@
             let total = 0;
             for (let month of allMonths) {
                 if (month.startsWith(year)) {
-                    for (let channel in monthlyRevenue[month]) {
-                        total += monthlyRevenue[month][channel];
+                    const md = monthlyRevenue[month] || {};
+                    for (let channel in md) {
+                        if (HIDDEN_CHANNELS && HIDDEN_CHANNELS.includes(channel)) continue;
+                        total += md[channel];
                     }
                 }
             }
@@ -1196,13 +1198,9 @@
                 updateAllDashboards();
             });
 
-            // Populate channel select
-            const channels = new Set();
-            allMonths.forEach(month => {
-                Object.keys(monthlyRevenue[month]).forEach(ch => channels.add(ch));
-            });
+            // Populate channel select（用顯示通路順序）
             const channelSelect = document.getElementById('channel-select');
-            Array.from(channels).sort().forEach(channel => {
+            DISPLAY_ORDER.forEach(channel => {
                 const option = document.createElement('option');
                 option.value = channel;
                 option.textContent = channel;
@@ -1268,6 +1266,7 @@
             {name: '百貨/門市', members: ['百貨/門市']},
             {name: '團購主',   members: ['團購主']}
         ];
+        const DISPLAY_ORDER = DISPLAY_CHANNELS.map(d => d.name);
         const HIDDEN_CHANNELS = ['公關'];
 
         function sumChannels(monthData, members) {
@@ -1275,6 +1274,25 @@
             members.forEach(m => { sum += (monthData[m] || 0); });
             return sum;
         }
+
+        // 把原始月資料轉成「顯示通路」結構（合併實體通路、排除公關）
+        function toDisplayMonthly(rawMonthly) {
+            const out = {};
+            Object.keys(rawMonthly).forEach(ym => {
+                const md = rawMonthly[ym] || {};
+                const agg = {};
+                DISPLAY_CHANNELS.forEach(def => {
+                    let v = 0;
+                    def.members.forEach(m => { v += (md[m] || 0); });
+                    if (v !== 0) agg[def.name] = v;
+                });
+                out[ym] = agg;
+            });
+            return out;
+        }
+
+        const displayMonthlyRevenue = toDisplayMonthly(monthlyRevenue);
+        const displayMonthlyUnits   = toDisplayMonthly(monthlyUnits);
 
         function updateRevenueCards() {
             const data = monthlyRevenue[selectedMonth] || {};
@@ -1337,11 +1355,11 @@
             const ctx = document.getElementById('revenue-trend-chart');
             const last12Months = allMonths.slice(-12);
             const channels = new Set();
-            last12Months.forEach(m => Object.keys(monthlyRevenue[m]).forEach(c => channels.add(c)));
+            last12Months.forEach(m => Object.keys(displayMonthlyRevenue[m] || {}).forEach(c => channels.add(c)));
 
-            const datasets = Array.from(channels).sort().map(channel => ({
+            const datasets = DISPLAY_ORDER.filter(c => channels.has(c)).map(channel => ({
                 label: channel,
-                data: last12Months.map(m => monthlyRevenue[m][channel] || 0),
+                data: last12Months.map(m => (displayMonthlyRevenue[m] || {})[channel] || 0),
                 borderColor: getChannelColor(channel),
                 backgroundColor: getChannelColor(channel) + '33',
                 borderWidth: 2,
@@ -1369,11 +1387,11 @@
             const ctx = document.getElementById('channel-stacked-chart');
             const last6Months = allMonths.slice(-6);
             const channels = new Set();
-            last6Months.forEach(m => Object.keys(monthlyRevenue[m]).forEach(c => channels.add(c)));
+            last6Months.forEach(m => Object.keys(displayMonthlyRevenue[m] || {}).forEach(c => channels.add(c)));
 
-            const datasets = Array.from(channels).sort().map(channel => ({
+            const datasets = DISPLAY_ORDER.filter(c => channels.has(c)).map(channel => ({
                 label: channel,
-                data: last6Months.map(m => monthlyRevenue[m][channel] || 0),
+                data: last6Months.map(m => (displayMonthlyRevenue[m] || {})[channel] || 0),
                 backgroundColor: getChannelColor(channel)
             }));
 
@@ -1457,7 +1475,7 @@
             let cumSum = 0;
             months2026.forEach(month => {
                 let monthTotal = 0;
-                Object.values(monthlyRevenue[month]).forEach(v => monthTotal += v);
+                Object.values(displayMonthlyRevenue[month] || {}).forEach(v => monthTotal += v);
                 cumSum += monthTotal;
                 cumulativeActual.push(cumSum);
             });
@@ -1511,7 +1529,7 @@
 
         function updateChannelRankingChart() {
             const ctx = document.getElementById('channel-ranking-chart');
-            const data = monthlyRevenue[selectedMonth] || {};
+            const data = displayMonthlyRevenue[selectedMonth] || {};
             const sorted = Object.entries(data).sort((a, b) => b[1] - a[1]);
 
             if (window.channelRankingChart) window.channelRankingChart.destroy();
@@ -1536,7 +1554,7 @@
 
         function updateChannelShareChart() {
             const ctx = document.getElementById('channel-share-chart');
-            const data = monthlyRevenue[selectedMonth] || {};
+            const data = displayMonthlyRevenue[selectedMonth] || {};
             const sorted = Object.entries(data).sort((a, b) => b[1] - a[1]);
 
             if (window.channelShareChart) window.channelShareChart.destroy();
@@ -1561,7 +1579,7 @@
             const table = document.getElementById('channel-heatmap-table');
             const channels = new Set();
             const months = allMonths.slice(-12);
-            months.forEach(m => Object.keys(monthlyRevenue[m]).forEach(c => channels.add(c)));
+            months.forEach(m => Object.keys(displayMonthlyRevenue[m] || {}).forEach(c => channels.add(c)));
 
             let html = '<thead><tr><th>通路</th>';
             months.forEach(m => {
@@ -1569,10 +1587,10 @@
             });
             html += '</tr></thead><tbody>';
 
-            Array.from(channels).sort().forEach(channel => {
+            DISPLAY_ORDER.filter(c => channels.has(c)).forEach(channel => {
                 html += `<tr><td><strong>${channel}</strong></td>`;
                 months.forEach(month => {
-                    const value = monthlyRevenue[month][channel] || 0;
+                    const value = (displayMonthlyRevenue[month] || {})[channel] || 0;
                     const color = value > 0 ? '#5CC8D7' : '#E0E0E0';
                     html += `<td style="background-color: ${color}33; text-align: center;">${Math.round(value / 100000)}</td>`;
                 });
@@ -1587,8 +1605,8 @@
             const months2024 = allMonths.filter(m => m.startsWith('2024')).slice(0, 10);
             const months2025 = allMonths.filter(m => m.startsWith('2025')).slice(0, 10);
 
-            const data2024 = months2024.map(m => Object.values(monthlyRevenue[m]).reduce((a, b) => a + b, 0));
-            const data2025 = months2025.map(m => Object.values(monthlyRevenue[m]).reduce((a, b) => a + b, 0));
+            const data2024 = months2024.map(m => Object.values(displayMonthlyRevenue[m] || {}).reduce((a, b) => a + b, 0));
+            const data2025 = months2025.map(m => Object.values(displayMonthlyRevenue[m] || {}).reduce((a, b) => a + b, 0));
 
             if (window.yoyChart) window.yoyChart.destroy();
             window.yoyChart = new Chart(ctx, {
@@ -1617,12 +1635,17 @@
         }
 
         function updateUnitsKPI() {
-            const data = monthlyUnits[selectedMonth] || {};
+            const data = displayMonthlyUnits[selectedMonth] || {};
             const grid = document.getElementById('units-kpi-grid');
             grid.innerHTML = '';
 
-            const displayData = selectedChannel === 'all' ? data : {[selectedChannel]: data[selectedChannel] || 0};
-            Object.entries(displayData).forEach(([channel, units]) => {
+            let entries;
+            if (selectedChannel === 'all') {
+                entries = DISPLAY_ORDER.filter(c => data[c] !== undefined).map(c => [c, data[c]]);
+            } else {
+                entries = [[selectedChannel, data[selectedChannel] || 0]];
+            }
+            entries.forEach(([channel, units]) => {
                 const card = document.createElement('div');
                 card.className = 'kpi-card';
                 card.innerHTML = `
@@ -1638,11 +1661,11 @@
             const ctx = document.getElementById('units-trend-chart');
             const last12Months = allMonths.slice(-12);
             const channels = new Set();
-            last12Months.forEach(m => Object.keys(monthlyUnits[m]).forEach(c => channels.add(c)));
+            last12Months.forEach(m => Object.keys(displayMonthlyUnits[m] || {}).forEach(c => channels.add(c)));
 
-            const datasets = Array.from(channels).sort().map(channel => ({
+            const datasets = DISPLAY_ORDER.filter(c => channels.has(c)).map(channel => ({
                 label: channel,
-                data: last12Months.map(m => monthlyUnits[m][channel] || 0),
+                data: last12Months.map(m => (displayMonthlyUnits[m] || {})[channel] || 0),
                 borderColor: getChannelColor(channel),
                 borderWidth: 2,
                 fill: false,
@@ -1667,7 +1690,7 @@
 
         function updateUnitsChannelChart() {
             const ctx = document.getElementById('units-channel-chart');
-            const data = monthlyUnits[selectedMonth] || {};
+            const data = displayMonthlyUnits[selectedMonth] || {};
             const sorted = Object.entries(data).sort((a, b) => b[1] - a[1]);
 
             if (window.unitsChannelChart) window.unitsChannelChart.destroy();
@@ -1692,7 +1715,7 @@
             const table = document.getElementById('units-table');
             let html = '<tbody>';
             allMonths.forEach(month => {
-                const total = Object.values(monthlyUnits[month]).reduce((a, b) => a + b, 0);
+                const total = Object.values(displayMonthlyUnits[month] || {}).reduce((a, b) => a + b, 0);
                 html += `<tr><td>${month}</td><td>${Math.round(total).toLocaleString('zh-TW')}</td></tr>`;
             });
             html += '</tbody>';
@@ -1752,7 +1775,7 @@
             const months2026 = allMonths.filter(m => m.startsWith('2026'));
 
             months2026.forEach(month => {
-                const total = Object.values(monthlyRevenue[month]).reduce((a, b) => a + b, 0);
+                const total = Object.values(displayMonthlyRevenue[month] || {}).reduce((a, b) => a + b, 0);
                 const card = document.createElement('div');
                 card.className = 'kpi-card';
                 const [, monthNum] = month.split('-');
@@ -1767,7 +1790,7 @@
         function updateMonthly2026Chart() {
             const ctx = document.getElementById('monthly-2026-chart');
             const months2026 = allMonths.filter(m => m.startsWith('2026'));
-            const revenues = months2026.map(m => Object.values(monthlyRevenue[m]).reduce((a, b) => a + b, 0));
+            const revenues = months2026.map(m => Object.values(displayMonthlyRevenue[m] || {}).reduce((a, b) => a + b, 0));
 
             if (window.monthly2026Chart) window.monthly2026Chart.destroy();
             window.monthly2026Chart = new Chart(ctx, {
@@ -1794,7 +1817,7 @@
             const months2026 = allMonths.filter(m => m.startsWith('2026'));
 
             months2026.forEach(month => {
-                const monthData = monthlyRevenue[month];
+                const monthData = displayMonthlyRevenue[month] || {};
                 const total = Object.values(monthData).reduce((a, b) => a + b, 0);
                 const channelCount = Object.keys(monthData).length;
                 html += `<tr><td>${month}</td><td>${formatCurrency(total)}</td><td>${channelCount}</td></tr>`;
