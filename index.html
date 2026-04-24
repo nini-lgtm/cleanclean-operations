@@ -698,8 +698,31 @@
     <div class="container">
         <!-- TAB 1: 營收總覽 -->
         <div id="tab-1" class="tab-content active">
+            <!-- 頂部核心 KPI -->
+            <div class="section-title">本月表現</div>
+            <div class="kpi-grid" id="overview-kpi-grid">
+                <!-- KPI cards: 本月營收 / vs上月 / vs去年同期 / 年度達標 -->
+            </div>
+
+            <!-- 月營收趨勢（直條 + 目標線） -->
+            <div class="section-title">月營收趨勢（近 12 個月）</div>
+            <div class="card full-width-chart">
+                <div class="chart-container">
+                    <canvas id="revenue-trend-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- 通路本月 vs 上月 變化 -->
+            <div class="section-title">通路變化（本月 vs 上月）</div>
+            <div class="card">
+                <table class="data-table" id="channel-change-table">
+                    <!-- populated by JS -->
+                </table>
+            </div>
+
+            <!-- 個別通路卡片（維持原樣，移到下方作細節） -->
             <div class="section-header-row">
-                <div class="section-title" style="margin:0;">個別通路營收</div>
+                <div class="section-title" style="margin:0;">個別通路營收（本月）</div>
                 <div class="total-revenue-badge">
                     <span class="badge-label">總營收</span>
                     <span class="badge-value" id="total-revenue">NT$ 0</span>
@@ -708,20 +731,6 @@
             </div>
             <div class="channel-grid" id="revenue-grid">
                 <!-- Channel cards will be populated by JS -->
-            </div>
-
-            <div class="section-title">營收趨勢</div>
-            <div class="card full-width-chart">
-                <div class="chart-container">
-                    <canvas id="revenue-trend-chart"></canvas>
-                </div>
-            </div>
-
-            <div class="section-title">通路營收堆疊</div>
-            <div class="card full-width-chart">
-                <div class="chart-container">
-                    <canvas id="channel-stacked-chart"></canvas>
-                </div>
             </div>
         </div>
 
@@ -1252,9 +1261,96 @@
         }
 
         function updateTab1() {
-            updateRevenueCards();
+            updateOverviewKPI();
             updateRevenueChart();
-            updateChannelStackedChart();
+            updateChannelChangeTable();
+            updateRevenueCards();
+        }
+
+        // 本月核心 KPI：本月營收 / vs上月 / vs去年同期 / 年度達標
+        function updateOverviewKPI() {
+            const grid = document.getElementById('overview-kpi-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const sumMonth = (ym) => Object.values(displayMonthlyRevenue[ym] || {}).reduce((a, b) => a + b, 0);
+
+            const cur = sumMonth(selectedMonth);
+            // 上月
+            const [yy, mm] = selectedMonth.split('-').map(Number);
+            const prevDate = new Date(yy, mm - 2, 1);
+            const prevYm = `${prevDate.getFullYear()}-${String(prevDate.getMonth() + 1).padStart(2, '0')}`;
+            const prev = sumMonth(prevYm);
+            // 去年同期
+            const yoyYm = `${yy - 1}-${String(mm).padStart(2, '0')}`;
+            const yoy = sumMonth(yoyYm);
+
+            const pct = (a, b) => (b > 0 ? ((a - b) / b * 100) : 0);
+            const fmtPct = v => (v >= 0 ? '↑ ' : '↓ ') + Math.abs(v).toFixed(1) + '%';
+            const colorOf = v => v >= 0 ? '#10B981' : '#EF4444';
+
+            const ytd = calculateYTD(String(yy));
+            const achieve = totalTarget > 0 ? (ytd / totalTarget * 100) : 0;
+
+            const cards = [
+                {label: `本月營收（${selectedMonth}）`, value: formatCurrency(cur), sub: ''},
+                {label: `vs 上月（${prevYm}）`, value: fmtPct(pct(cur, prev)), sub: formatCurrency(prev), color: colorOf(pct(cur, prev))},
+                {label: `vs 去年同期（${yoyYm}）`, value: yoy > 0 ? fmtPct(pct(cur, yoy)) : '—', sub: yoy > 0 ? formatCurrency(yoy) : '無資料', color: yoy > 0 ? colorOf(pct(cur, yoy)) : '#999'},
+                {label: `${yy} 年度達標率`, value: achieve.toFixed(1) + '%', sub: `${formatCurrency(ytd)} / ${formatCurrency(totalTarget)}`, color: achieve >= 100 ? '#10B981' : '#F59E0B'}
+            ];
+
+            cards.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'kpi-card';
+                card.innerHTML = `
+                    <div class="kpi-label">${c.label}</div>
+                    <div class="kpi-value" style="${c.color ? 'color:' + c.color : ''}">${c.value}</div>
+                    <div class="card-subtitle">${c.sub || '&nbsp;'}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 通路本月 vs 上月 變化表
+        function updateChannelChangeTable() {
+            const table = document.getElementById('channel-change-table');
+            if (!table) return;
+            const [yy, mm] = selectedMonth.split('-').map(Number);
+            const prevDate = new Date(yy, mm - 2, 1);
+            const prevYm = `${prevDate.getFullYear()}-${String(prevDate.getMonth() + 1).padStart(2, '0')}`;
+
+            const cur = displayMonthlyRevenue[selectedMonth] || {};
+            const prev = displayMonthlyRevenue[prevYm] || {};
+
+            let html = `<thead><tr><th style="text-align:left;">通路</th><th style="text-align:right;">本月 (${selectedMonth})</th><th style="text-align:right;">上月 (${prevYm})</th><th style="text-align:right;">變化</th><th style="text-align:right;">本月佔比</th></tr></thead><tbody>`;
+
+            const totalCur = Object.values(cur).reduce((a, b) => a + b, 0);
+
+            DISPLAY_ORDER.forEach(ch => {
+                const c = cur[ch] || 0;
+                const p = prev[ch] || 0;
+                const diff = p > 0 ? ((c - p) / p * 100) : (c > 0 ? 100 : 0);
+                const share = totalCur > 0 ? (c / totalCur * 100) : 0;
+                const color = diff >= 0 ? '#10B981' : '#EF4444';
+                const arrow = diff >= 0 ? '↑' : '↓';
+                const diffStr = p > 0 ? `${arrow} ${Math.abs(diff).toFixed(1)}%` : (c > 0 ? '新增' : '—');
+                html += `<tr>
+                    <td style="text-align:left;"><span style="color:${getChannelColor(ch)};font-weight:700;">●</span> ${ch}</td>
+                    <td style="text-align:right;font-weight:600;">${formatCurrency(c)}</td>
+                    <td style="text-align:right;color:#999;">${formatCurrency(p)}</td>
+                    <td style="text-align:right;font-weight:700;color:${p > 0 ? color : '#999'};">${diffStr}</td>
+                    <td style="text-align:right;">${share.toFixed(1)}%</td>
+                </tr>`;
+            });
+
+            html += `<tr style="background:#f1f5f9;font-weight:700;">
+                <td style="text-align:left;">總計</td>
+                <td style="text-align:right;">${formatCurrency(totalCur)}</td>
+                <td style="text-align:right;">${formatCurrency(Object.values(prev).reduce((a,b)=>a+b,0))}</td>
+                <td></td><td>100%</td>
+            </tr>`;
+            html += '</tbody>';
+            table.innerHTML = html;
         }
 
         // 顯示通路順序與群組定義（公關不顯示；經銷商+特約商+員購 合併為 實體通路）
@@ -1354,31 +1450,65 @@
         function updateRevenueChart() {
             const ctx = document.getElementById('revenue-trend-chart');
             const last12Months = allMonths.slice(-12);
-            const channels = new Set();
-            last12Months.forEach(m => Object.keys(displayMonthlyRevenue[m] || {}).forEach(c => channels.add(c)));
+            const totals = last12Months.map(m =>
+                Object.values(displayMonthlyRevenue[m] || {}).reduce((a, b) => a + b, 0)
+            );
+            const monthlyTarget = totalTarget / 12; // 年度目標平均分攤
+            const targetLine = last12Months.map(() => monthlyTarget);
 
-            const datasets = DISPLAY_ORDER.filter(c => channels.has(c)).map(channel => ({
-                label: channel,
-                data: last12Months.map(m => (displayMonthlyRevenue[m] || {})[channel] || 0),
-                borderColor: getChannelColor(channel),
-                backgroundColor: getChannelColor(channel) + '33',
-                borderWidth: 2,
-                fill: false,
-                tension: 0.3
-            }));
+            // 達標與否著色
+            const barColors = totals.map(v => v >= monthlyTarget ? '#10B981' : '#5CC8D7');
 
             if (window.revenueChart) window.revenueChart.destroy();
             window.revenueChart = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
-                    labels: last12Months.map(m => m.slice(5)),
-                    datasets: datasets
+                    labels: last12Months.map(m => {
+                        const [y, mo] = m.split('-');
+                        return `${y.slice(2)}/${mo}`;
+                    }),
+                    datasets: [
+                        {
+                            type: 'bar',
+                            label: '月營收',
+                            data: totals,
+                            backgroundColor: barColors,
+                            borderRadius: 6,
+                            order: 2
+                        },
+                        {
+                            type: 'line',
+                            label: `月目標 (${Math.round(monthlyTarget/10000)}萬)`,
+                            data: targetLine,
+                            borderColor: '#EF4444',
+                            borderWidth: 2,
+                            borderDash: [6, 6],
+                            fill: false,
+                            pointRadius: 0,
+                            tension: 0,
+                            order: 1
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {legend: {position: 'top'}},
-                    scales: {y: {beginAtZero: true}}
+                    plugins: {
+                        legend: {position: 'top'},
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}：${formatCurrency(ctx.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: v => (v / 1000000).toFixed(1) + 'M'
+                            }
+                        }
+                    }
                 }
             });
         }
